@@ -1,7 +1,7 @@
 ---
 version: 1.2.0
 name: ChatTrimmer
-website: "https://github.com/<username>/chattrrimer"
+website: "https://github.com/txqt/chattrrimer"
 description: >-
   The design language of the ChatTrimmer browser-extension popup — a dark,
   instrument-like utility built on a near-black zinc canvas "#141619", a single
