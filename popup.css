@@ -1,38 +1,30 @@
-/* ChatTrimmer popup — design tokens theo DESIGN.md (hệ Affirm) */
+/* ChatTrimmer popup — hệ Affirm (DESIGN.md), bố cục "số ẩn là nhân vật chính" */
 
 :root {
-  /* Brand & accent */
-  --indigo: #4a4af4;          /* chỉ dùng cho focus ring / CTA phụ trên nền tối */
-  --indigo-dark: #2f2fc1;
+  --indigo: #4a4af4;
   --indigo-darkest: #212189;
-  --glow: #9cadfc;            /* periwinkle — medium tạo chiều sâu, không làm fill CTA */
+  --glow: #9cadfc;
   --wash: #e2e2ff;
 
-  /* Canvas & surface */
-  --canvas: #101820;          /* indigo-black, nền mặc định */
-  --canvas-elevated: #0c0c14; /* card / product-mockup */
-  --canvas-glass: #1b1b30;    /* glass overlay */
-  --canvas-light: #ffffff;    /* CTA fill + input fill */
+  --canvas: #101820;
+  --canvas-elevated: #0c0c14;
+  --canvas-glass: #1b1b30;
+  --canvas-light: #ffffff;
 
-  /* Ink */
   --ink: #ffffff;
   --ink-caption: #6d6e71;
   --ink-disabled: #9f9f9f;
 
-  /* Semantic */
   --success: #2abc7a;
   --destructive: #ff6d50;
 
-  /* Radius */
-  --r-xs: 4px;    /* form chrome */
-  --r-md: 16px;   /* mid-size card */
-  --r-lg: 24px;   /* card */
-  --r-pill: 96px; /* CTA, tag */
+  --r-xs: 4px;
+  --r-md: 16px;
+  --r-lg: 24px;
+  --r-pill: 96px;
 
-  /* Depth: glow periwinkle thay cho shadow xám */
   --glow-1: 0 0 12px rgba(168, 169, 252, 0.25);
   --glow-2: 0 0 60px rgba(168, 169, 252, 0.25);
-
   --outline: 2px solid #4a4af4;
 
   --font: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -50,159 +42,129 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-.app { display: flex; flex-direction: column; position: relative; }
+.app { position: relative; display: flex; flex-direction: column; }
 
-/* ---------- Header ---------- */
-.app-header {
-  position: relative;
+/* ---------- Topbar ---------- */
+.topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 20px 16px 16px;
-  overflow: hidden;
+  padding: 16px 16px 8px;
 }
 
-/* halo periwinkle sau header — chữ ký chiều sâu của brand */
-.app-header::before {
-  content: "";
-  position: absolute;
-  top: -120px;
-  left: -40px;
-  width: 280px;
-  height: 220px;
-  border-radius: 50%;
-  background: var(--glow);
-  opacity: 0.16;
-  filter: blur(60px);
-  pointer-events: none;
-}
-
-.brand { display: flex; align-items: center; gap: 10px; min-width: 0; position: relative; }
-
+.brand { display: flex; align-items: center; gap: 8px; }
 .brand-mark {
-  width: 34px;
-  height: 34px;
-  flex: none;
+  width: 30px;
+  height: 30px;
   display: grid;
   place-items: center;
   border-radius: var(--r-pill);
   background: var(--canvas-light);
   color: var(--canvas);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
-  letter-spacing: -0.4px;
+  letter-spacing: -0.3px;
 }
-
-.brand-text { min-width: 0; }
-.brand-text h1 {
+.brand-name {
   font-size: 16px;
   font-weight: 300;
   letter-spacing: -0.4px;
   color: var(--ink);
-  line-height: 1.1;
-}
-.brand-text p {
-  font-size: 12px;
-  color: var(--ink-disabled);
-  letter-spacing: 0.25px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
-.version {
-  position: relative;
-  flex: none;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--indigo-darkest);
-  background: var(--wash);
-  padding: 4px 8px;
-  border-radius: var(--r-pill);
-}
-
-/* ---------- Pill tabs ---------- */
-.pill-tabs {
-  display: flex;
-  gap: 4px;
-  margin: 0 16px;
-  padding: 4px;
-  background: var(--canvas-elevated);
-  border-radius: var(--r-pill);
-}
-
-.pill-tab {
-  flex: 1;
-  border: none;
+.icon-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.16);
   background: transparent;
   color: var(--ink-disabled);
-  font: inherit;
-  font-size: 14px;
-  font-weight: 500;
-  padding: 10px 14px;
-  border-radius: var(--r-pill);
+  font-size: 16px;
+  line-height: 1;
   cursor: pointer;
-  transition: color 0.15s ease, background 0.15s ease;
+  transition: color 0.15s ease, border-color 0.15s ease, transform 0.3s ease;
 }
-.pill-tab:hover { color: var(--ink); }
-.pill-tab.active {
-  background: var(--canvas-light);
-  color: var(--canvas);
-}
-.pill-tab:focus-visible { outline: var(--outline); outline-offset: 2px; }
+.icon-btn:hover { color: var(--ink); border-color: var(--canvas-light); }
+.icon-btn:focus-visible { outline: var(--outline); outline-offset: 2px; }
+.icon-btn.spinning { transform: rotate(360deg); }
 
-/* ---------- Tab panels ---------- */
-.tab-panel { display: none; padding: 16px; }
-.tab-panel.active { display: block; }
-
-/* ---------- Card ---------- */
-.card {
-  background: var(--canvas-elevated);
-  border-radius: var(--r-lg);
-  padding: 20px 24px;
-  margin-bottom: 12px;
-  box-shadow: var(--glow-1);
-}
-
-.eyebrow {
-  display: block;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--ink-disabled);
-  margin-bottom: 10px;
-}
-
-.platform-card {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 24px;
-}
-.platform-card .eyebrow { margin: 0; }
-
-.card-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-.card-head .eyebrow { margin: 0; }
-.muted-small { font-size: 12px; color: var(--ink-caption); letter-spacing: 0.25px; }
-
-/* ---------- Rows ---------- */
-.row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-.row + .row {
-  margin-top: 16px;
-  padding-top: 16px;
+/* ---------- Hero ---------- */
+.hero {
   position: relative;
+  padding: 18px 16px 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  overflow: hidden;
 }
-/* divider stroke: gradient indigo 1px */
+
+.hero-halo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 220px;
+  height: 220px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, rgba(156, 173, 252, 0.45) 0%, rgba(41, 106, 125, 0.28) 55%, rgba(19, 19, 31, 0) 100%);
+  pointer-events: none;
+}
+
+.hero-number {
+  position: relative;
+  font-size: 56px;
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: 0;
+  color: var(--ink);
+}
+.hero-label {
+  position: relative;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.25px;
+  color: var(--ink-disabled);
+}
+
+/* ---------- Hero actions ---------- */
+.hero-actions {
+  display: flex;
+  gap: 8px;
+  padding: 0 16px;
+}
+
+.btn {
+  height: 48px;
+  padding: 14px 23px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: var(--r-pill);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.btn:focus-visible { outline: var(--outline); outline-offset: 2px; }
+.btn-primary { flex: 1; background: var(--canvas-light); color: var(--canvas); }
+.btn-primary:hover { background: var(--glow); }
+.btn-primary:disabled { opacity: 0.5; cursor: default; }
+.btn-secondary { background: var(--canvas); color: var(--ink); border-color: var(--canvas-light); }
+.btn-secondary:hover { background: var(--canvas-glass); }
+
+/* ---------- Divider stroke ---------- */
+.divider {
+  height: 1px;
+  margin: 20px 16px 0;
+  background: linear-gradient(90deg, rgba(74, 74, 244, 0.1), #4a4af4 50%, rgba(74, 74, 244, 0.1));
+  opacity: 0.6;
+}
+
+/* ---------- Panel ---------- */
+.panel { padding: 16px; }
+
+.row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.row + .row { margin-top: 16px; padding-top: 16px; position: relative; }
 .row + .row::before {
   content: "";
   position: absolute;
@@ -238,7 +200,6 @@ body {
 /* ---------- Switch ---------- */
 .switch { position: relative; display: inline-flex; flex: none; cursor: pointer; }
 .switch input { position: absolute; opacity: 0; width: 0; height: 0; }
-
 .switch-track {
   width: 44px;
   height: 26px;
@@ -263,175 +224,62 @@ body {
 .switch input:checked + .switch-track::after { transform: translateX(18px); background: var(--canvas); }
 .switch input:focus-visible + .switch-track { outline: var(--outline); outline-offset: 2px; }
 
-/* ---------- Site rows ---------- */
-.site-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 0;
-  cursor: pointer;
-}
-.site-row + .site-row { position: relative; }
-.site-row + .site-row::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, rgba(74, 74, 244, 0.1), #4a4af4 50%, rgba(74, 74, 244, 0.1));
-  opacity: 0.4;
-}
-.site-name { font-size: 15px; font-weight: 400; color: var(--ink); }
-.site-row .badge { margin-left: 2px; }
-.site-row input[type="checkbox"] {
-  margin-left: auto;
-  width: 18px;
-  height: 18px;
-  accent-color: var(--indigo);
-  cursor: pointer;
-}
-
-/* ---------- Badges ---------- */
-.badge {
-  display: inline-block;
+/* ---------- Chips (tag-pill-soft) ---------- */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  font: inherit;
   font-size: 12px;
   font-weight: 400;
   letter-spacing: 0.25px;
-  color: var(--ink);
-  background: var(--canvas-glass);
-  padding: 4px 8px;
-  border-radius: var(--r-pill);
-  white-space: nowrap;
-}
-.badge-ok {
-  background: var(--wash);
-  color: var(--indigo-darkest);
-  font-weight: 500;
-}
-
-/* ---------- Buttons ---------- */
-.actions { display: flex; gap: 8px; margin-top: 4px; }
-.btn {
-  height: 48px;
-  padding: 14px 23px;
-  font: inherit;
-  font-size: 15px;
-  font-weight: 500;
+  padding: 6px 12px;
   border-radius: var(--r-pill);
   border: 1px solid transparent;
-  cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-}
-.btn:focus-visible { outline: var(--outline); outline-offset: 2px; }
-
-/* CTA chính: trắng trên nền tối; hover chuyển sang periwinkle glow */
-.btn-primary { background: var(--canvas-light); color: var(--canvas); flex: 1; }
-.btn-primary:hover { background: var(--glow); }
-.btn-primary:disabled { opacity: 0.5; cursor: default; }
-
-/* CTA phụ: ghost viền trắng */
-.btn-secondary {
-  background: var(--canvas);
-  color: var(--ink);
-  border-color: var(--canvas-light);
-}
-.btn-secondary:hover { background: var(--canvas-glass); }
-
-.btn.full { width: 100%; margin-top: 4px; }
-
-/* ---------- Status ---------- */
-.status {
-  display: none;
-  margin-top: 12px;
-  padding: 12px 16px;
-  border-radius: var(--r-md);
-  font-size: 14px;
-  font-weight: 500;
-}
-.status.success { display: block; background: rgba(42, 188, 122, 0.14); color: var(--success); }
-.status.error { display: block; background: rgba(255, 109, 80, 0.14); color: var(--destructive); }
-
-/* ---------- Statistics ---------- */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  margin-bottom: 12px;
-}
-.stat-card {
-  background: var(--canvas-elevated);
-  border-radius: var(--r-lg);
-  padding: 16px 8px;
-  text-align: center;
-  box-shadow: var(--glow-1);
-}
-.stat-num {
-  display: block;
-  font-size: 30px;
-  font-weight: 300;
-  letter-spacing: -0.6px;
-  color: var(--ink);
-  line-height: 1.1;
-}
-.stat-label { font-size: 12px; font-weight: 400; letter-spacing: 0.25px; color: var(--ink-disabled); }
-
-.messages-list { max-height: 240px; overflow-y: auto; }
-.messages-list::-webkit-scrollbar { width: 6px; }
-.messages-list::-webkit-scrollbar-thumb {
   background: var(--canvas-glass);
-  border-radius: var(--r-pill);
-}
-
-.message-item {
-  padding: 12px 0;
+  color: var(--ink-disabled);
   cursor: pointer;
-  position: relative;
+  transition: background 0.15s ease, color 0.15s ease;
 }
-.message-item + .message-item::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, rgba(74, 74, 244, 0.1), #4a4af4 50%, rgba(74, 74, 244, 0.1));
-  opacity: 0.35;
-}
-.message-item:hover .message-content { color: var(--ink); }
+.chip:hover { color: var(--ink); }
+.chip.on { background: var(--wash); color: var(--indigo-darkest); font-weight: 500; }
+.chip:focus-visible { outline: var(--outline); outline-offset: 2px; }
 
-.message-header {
+/* ---------- Summary ---------- */
+.summary {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 4px;
+  gap: 8px;
+  padding: 14px 16px 16px;
 }
-.message-sender { font-size: 14px; font-weight: 500; color: var(--ink); }
-.message-sender.ai { color: var(--glow); }
-.message-time { font-size: 12px; letter-spacing: 0.25px; color: var(--ink-caption); }
-.message-content {
-  font-size: 14px;
-  font-weight: 400;
-  color: var(--ink-disabled);
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.loading-placeholder {
-  padding: 24px 0;
-  text-align: center;
-  font-size: 14px;
-  color: var(--ink-caption);
-}
-
-/* ---------- Footer ---------- */
-.app-footer {
-  padding: 16px;
-  border-top: 1px solid rgba(74, 74, 244, 0.35);
+.summary-counts { font-size: 12px; letter-spacing: 0.25px; color: var(--ink-caption); }
+.summary-counts b { color: var(--ink); font-weight: 500; }
+.dot { color: var(--ink-caption); }
+.platform-tag {
   font-size: 12px;
-  letter-spacing: 0.25px;
-  color: var(--ink-caption);
-  text-align: center;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: var(--r-pill);
+  background: var(--canvas-glass);
+  color: var(--ink-disabled);
 }
+.platform-tag.ok { background: var(--wash); color: var(--indigo-darkest); }
+
+/* ---------- Toast ---------- */
+.toast {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translate(-50%, 8px);
+  padding: 8px 16px;
+  border-radius: var(--r-pill);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.25px;
+  color: var(--canvas);
+  background: var(--glow);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.toast.error { background: var(--destructive); color: var(--ink); }

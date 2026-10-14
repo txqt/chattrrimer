@@ -249,6 +249,7 @@
     });
     return {
       platform: site ? site.name : null,
+      hidden: messages.filter((m) => m.classList.contains(HIDDEN_CLASS)).length,
       totalUser: list.filter((m) => m.isUser).length,
       totalAi: list.filter((m) => !m.isUser).length,
       totalAll: list.length,
@@ -315,6 +316,11 @@
         break;
       case 'ct:goto':
         sendResponse({ ok: true, found: goToMessage(request.id) });
+        break;
+      case 'ct:revealAll':
+        extraVisible = Infinity;
+        applyTrim();
+        sendResponse({ ok: true });
         break;
       default:
         return;
