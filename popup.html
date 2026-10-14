@@ -25,7 +25,7 @@
     <!-- Fold map -->
     <section class="fold-map" id="foldSection">
       <div class="fold-map-head">
-        <span class="label">Conversation Fold Map</span>
+        <span class="label" data-i18n="labelFoldMap">Conversation Fold Map</span>
         <span class="label accent" id="foldCount">0 folds</span>
       </div>
 
@@ -35,7 +35,7 @@
         <div class="tail-head">
           <span class="dot dot-live"></span>
           <span class="tail-title" id="tailTitle">Active Tail: last 0 messages</span>
-          <span class="tag">Visible</span>
+          <span class="tag" data-i18n="tagVisible">Visible</span>
         </div>
         <p class="tail-desc" id="tailDesc"></p>
         <button class="btn-primary" id="unfoldAllBtn" type="button">
@@ -48,7 +48,7 @@
     <!-- Trim stepper -->
     <section class="stepper">
       <div class="stepper-head">
-        <span class="stepper-label">Tail Window Size</span>
+        <span class="stepper-label" data-i18n="labelTailSize">Tail Window Size</span>
         <span class="mono accent" id="tailValue">30 messages</span>
       </div>
       <input type="range" id="tailRange" min="10" max="100" step="5" value="30" aria-label="Visible messages">
@@ -63,17 +63,25 @@
     <section class="stats-row">
       <div class="stat"><span class="dot dot-user"></span><span class="mono" id="statUser">You: 0 (0%)</span></div>
       <div class="stat"><span class="dot dot-ai"></span><span class="mono" id="statAi">ChatGPT: 0 (0%)</span></div>
-      <button class="link-btn" id="exportBtn" type="button">Export CSV</button>
+      <button class="link-btn" id="exportBtn" type="button" data-i18n="actionExportCsv">Export CSV</button>
     </section>
 
     <!-- Footer -->
     <footer class="foot">
-      <span data-i18n="footLabel">Auto-trimming:</span> <strong>ChatGPT</strong>
+      <span><span data-i18n="footLabel">Auto-trimming:</span> <strong>ChatGPT</strong></span>
+      <div class="foot-right">
+        <div class="lang-switch" id="langSwitch" role="group" aria-label="Language">
+          <button class="lang-btn" data-lang="en" type="button">EN</button>
+          <button class="lang-btn" data-lang="vi" type="button">VI</button>
+        </div>
+        <span class="version" id="version">v1.3.0</span>
+      </div>
     </footer>
 
     <div class="toast" id="toast" role="status"></div>
   </div>
 
+  <script src="src/i18n.js"></script>
   <script src="src/popup.js"></script>
 </body>
 </html>

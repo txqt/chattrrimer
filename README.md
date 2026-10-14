@@ -26,19 +26,28 @@ Fold away the old messages in **ChatGPT** so long conversations stop feeling slu
 
 ## Localization
 
-The UI ships with **English** and **Vietnamese** via Chrome's i18n (`_locales/`).
-It follows the browser language automatically — no setting to change. To add a language, copy
-`_locales/en/` to `_locales/<code>/` and translate the values.
+The UI ships with **English** and **Vietnamese**. There is a small **EN / VI** switch in the
+popup footer, and the choice is remembered.
+
+- On first run the language follows the browser UI language (via `chrome.i18n`).
+- Picking EN or VI overrides it and is stored in `chrome.storage.sync`.
+- The on-page button follows the same setting.
+- UI strings live in `src/i18n.js`; `_locales/` only carries the extension name and description
+  (Chrome needs those at install time and they follow the browser language).
+
+To add a language: add a dictionary to `src/i18n.js`, list its code in `LANGS`, and copy
+`_locales/en/` to `_locales/<code>/` for the store name and description.
 
 ## Project structure
 
 ```
 manifest.json         # Manifest V3 (ChatGPT hosts only)
 popup.html / .css     # Popup UI — "Thread Accordion"
-src/popup.js          # Popup logic (fold map, stats, CSV, i18n)
+src/i18n.js           # UI strings (en / vi) + runtime language switch
+src/popup.js          # Popup logic (fold map, stats, CSV)
 src/content.js        # Content script: folds/unfolds messages on the page
 styles.css            # Styles injected into the page (hidden class, on-page button)
-_locales/en|vi        # UI strings
+_locales/en|vi        # Extension name + description for Chrome
 fonts/                # Plus Jakarta Sans + JetBrains Mono (OFL), bundled
 icons/                # 16/48/128 icons
 DESIGN.md             # Design system reference for the current UI

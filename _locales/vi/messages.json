@@ -1,45 +1,4 @@
 {
   "extName": { "message": "ChatTrimmer" },
-  "extDesc": { "message": "Gấp tin nhắn cũ trong ChatGPT để cuộc trò chuyện dài không còn lag." },
-
-  "headFolding": { "message": "Đang gấp tin nhắn cũ" },
-  "headOff": { "message": "Đang tắt" },
-  "headTail": { "message": "Active Tail: $1 tin cuối" },
-  "tailDescHidden": { "message": "$1 tin cũ hơn đang được gấp lại. Trang cuộn tức thì." },
-  "tailDescNone": { "message": "Không có tin nào bị gấp. Cuộc trò chuyện đang ở trạng thái gọn." },
-  "unfoldAll": { "message": "Mở toàn bộ cuộc trò chuyện" },
-  "unfoldMeta": { "message": "($1 tin)" },
-
-  "stepperValue": { "message": "$1 tin" },
-  "scaleCompact": { "message": "Gọn (10)" },
-  "scaleStandard": { "message": "Chuẩn (30)" },
-  "scaleWide": { "message": "Rộng (100)" },
-
-  "statYou": { "message": "Bạn: $1 ($2%)" },
-  "statAi": { "message": "ChatGPT: $1 ($2%)" },
-
-  "foldRange": { "message": "Tin $1 — $2" },
-  "emptyNoFolds": { "message": "Không có tin nào bị gấp" },
-  "emptyNoConversation": { "message": "Không tìm thấy cuộc trò chuyện nào" },
-  "unsupportedTitle": { "message": "Không hỗ trợ" },
-  "unsupportedSub": { "message": "Mở một cuộc trò chuyện trên chatgpt.com rồi thử lại" },
-  "footLabel": { "message": "Tự động gấp:" },
-
-  "toastUnfolded": { "message": "Đã mở tin $1 — $2" },
-  "toastUnfoldAll": { "message": "Đã mở toàn bộ cuộc trò chuyện" },
-  "toastNoData": { "message": "Chưa có dữ liệu để xuất" },
-  "toastExported": { "message": "Đã xuất file CSV" },
-  "toastNoConnection": { "message": "Chưa kết nối được trang" },
-
-  "contentOpen": { "message": "Mở $1 tin · $2 đang gấp" },
-  "senderYou": { "message": "Bạn" },
-
-  "csvIndex": { "message": "STT" },
-  "csvSender": { "message": "Nguoi gui" },
-  "csvContent": { "message": "Noi dung" },
-  "csvLength": { "message": "Do dai" },
-  "csvYours": { "message": "Tong tin cua ban" },
-  "csvAi": { "message": "Tong tin ChatGPT" },
-  "csvTotal": { "message": "Tong cong" },
-  "csvThread": { "message": "Ho so" }
+  "extDesc": { "message": "Gấp tin nhắn cũ trong ChatGPT để cuộc trò chuyện dài không còn lag." }
 }

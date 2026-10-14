@@ -4,9 +4,10 @@
 (() => {
   'use strict';
 
-  const DEFAULTS = { isEnabled: true, maxVisible: 30 };
+  const DEFAULTS = { isEnabled: true, maxVisible: 30, lang: 'auto' };
 
   const $ = (id) => document.getElementById(id);
+  const t = (key, subs) => CT_I18N.t(key, subs);
 
   let settings = { ...DEFAULTS };
   let state = null;
@@ -15,18 +16,12 @@
 
   // ---------- i18n ----------
 
-  function t(key, subs) {
-    try {
-      return chrome.i18n.getMessage(key, subs) || key;
-    } catch {
-      return key;
-    }
-  }
-
   function localizeStatic() {
     document.querySelectorAll('[data-i18n]').forEach((el) => {
-      const msg = t(el.dataset.i18n);
-      if (msg) el.textContent = msg;
+      el.textContent = t(el.dataset.i18n);
+    });
+    document.querySelectorAll('.lang-btn').forEach((btn) => {
+      btn.classList.toggle('on', btn.dataset.lang === CT_I18N.lang());
     });
   }
 
@@ -76,7 +71,7 @@
   function render(data) {
     const enabled = settings.isEnabled;
 
-    $('statePill').textContent = enabled ? 'Active' : 'Off';
+    $('statePill').textContent = enabled ? t('stateActive') : t('stateOff');
     $('statePill').classList.toggle('off', !enabled);
     $('headSub').textContent = enabled ? t('headFolding') : t('headOff');
     $('statusDot').style.background = enabled ? 'var(--ok)' : 'var(--text-faint)';
@@ -88,7 +83,7 @@
     if (!data) {
       $('threadTitle').textContent = t('unsupportedTitle');
       $('headSub').textContent = t('unsupportedSub');
-      $('foldCount').textContent = '0 folds';
+      $('foldCount').textContent = t('foldsCount', '0');
       $('folds').innerHTML = `<div class="empty">${escapeHtml(t('emptyNoConversation'))}</div>`;
       $('tailTitle').textContent = t('headTail', '0');
       $('tailDesc').textContent = '';
@@ -101,7 +96,7 @@
 
     $('threadTitle').textContent = data.title || 'ChatGPT';
     $('tailTitle').textContent = t('headTail', String(data.tail));
-    $('foldCount').textContent = `${data.folds.length} folds`;
+    $('foldCount').textContent = t('foldsCount', String(data.folds.length));
     $('unfoldMeta').textContent = t('unfoldMeta', String(data.hidden));
     $('unfoldAllBtn').disabled = data.hidden === 0;
     $('statUser').textContent = t('statYou', [String(data.user), String(pct(data.user, data.total))]);
@@ -128,12 +123,12 @@
             <div class="fold-info">
               <div class="fold-range">
                 <span>${escapeHtml(t('foldRange', [String(f.from), String(f.to)]))}</span>
-                <span class="fold-tag">Folded</span>
+                <span class="fold-tag">${escapeHtml(t('tagFolded'))}</span>
               </div>
               <div class="fold-desc" title="${escapeAttr(f.preview)}">${escapeHtml(f.preview)}</div>
             </div>
           </div>
-          <button class="fold-expand" data-from="${f.from}" data-to="${f.to}" type="button">Expand</button>
+          <button class="fold-expand" data-from="${f.from}" data-to="${f.to}" type="button">${escapeHtml(t('actionExpand'))}</button>
         </div>`)
       .join('');
 
@@ -203,6 +198,17 @@
       toast(t('toastUnfoldAll'));
     });
 
+    $('langSwitch').addEventListener('click', async (event) => {
+      const btn = event.target.closest('.lang-btn');
+      if (!btn) return;
+      settings.lang = btn.dataset.lang;
+      CT_I18N.set(settings.lang);
+      await chrome.storage.sync.set({ lang: settings.lang });
+      await ask('ct:setSettings', { settings });
+      localizeStatic();
+      render(state);
+    });
+
     $('exportBtn').addEventListener('click', exportCsv);
   }
 
@@ -243,8 +249,10 @@
   // ---------- Khởi động ----------
 
   async function init() {
-    localizeStatic();
     settings = await readSettings();
+    CT_I18N.set(settings.lang);
+    $('version').textContent = `v${chrome.runtime.getManifest().version}`;
+    localizeStatic();
     bind();
     await refresh();
   }

@@ -289,6 +289,10 @@ body {
 
 /* ---------- Footer ---------- */
 .foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   padding: 10px 16px;
   background: var(--foot-bg);
   border-top: 1px solid var(--border);
@@ -297,6 +301,34 @@ body {
   color: var(--text-dim);
 }
 .foot strong { color: #d4d4d8; font-weight: 500; }
+
+.foot-right { display: flex; align-items: center; gap: 8px; flex: none; }
+
+.lang-switch {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
+}
+.lang-btn {
+  border: none;
+  background: none;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.lang-btn:hover { color: var(--text); }
+.lang-btn.on { background: var(--purple-deep); color: #fff; }
+.lang-btn:focus-visible { outline: 2px solid var(--purple); outline-offset: 1px; }
+
+.version { font-family: var(--mono); font-size: 9px; letter-spacing: 0.05em; color: var(--text-faint); }
 
 /* ---------- Empty / toast ---------- */
 .empty {

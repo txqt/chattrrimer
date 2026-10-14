@@ -13,7 +13,7 @@
   const HIDDEN_CLASS = 'ct-hidden';
   const FOLD_SIZE = 50; // số tin gom vào một fold
 
-  const DEFAULTS = { isEnabled: true, maxVisible: 30 };
+  const DEFAULTS = { isEnabled: true, maxVisible: 30, lang: 'auto' };
 
   const SITE = {
     name: 'ChatGPT',
@@ -41,14 +41,6 @@
     let t = (raw || '').trim().replace(/\s+/g, ' ');
     for (const p of PREFIXES) t = t.replace(p, '');
     return t;
-  }
-
-  function t(key, subs) {
-    try {
-      return chrome.i18n.getMessage(key, subs) || key;
-    } catch {
-      return key;
-    }
   }
 
   function isUser(el) {
@@ -193,7 +185,7 @@
     const folds = computeFolds();
     const newest = folds[folds.length - 1];
     button.hidden = false;
-    button.textContent = t('contentOpen', [String(newest ? newest.count : n), String(n)]);
+    button.textContent = CT_I18N.t('contentOpen', [String(newest ? newest.count : n), String(n)]);
   }
 
   // ---------- Theo dõi DOM ----------
@@ -248,7 +240,7 @@
     return collectMessages().map((el, i) => {
       const text = cleanText(el.textContent);
       const u = isUser(el);
-      return { index: i + 1, isUser: u, sender: u ? t('senderYou') : 'ChatGPT', content: text, length: text.length };
+      return { index: i + 1, isUser: u, sender: u ? CT_I18N.t('senderYou') : 'ChatGPT', content: text, length: text.length };
     });
   }
 
@@ -257,10 +249,12 @@
   async function loadSettings() {
     const saved = await chrome.storage.sync.get(DEFAULTS);
     settings = { ...DEFAULTS, ...saved };
+    CT_I18N.set(settings.lang);
   }
 
   function applySettings(next) {
     settings = { ...settings, ...(next || {}) };
+    CT_I18N.set(settings.lang);
     unfoldAll = false;
     applyTrim();
   }
@@ -304,5 +298,12 @@
   loadSettings().then(() => {
     boot();
     setInterval(watchUrl, 1000);
+  });
+
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area !== 'sync' || !changes.lang) return;
+    settings.lang = changes.lang.newValue;
+    CT_I18N.set(settings.lang);
+    paintButton();
   });
 })();
