@@ -1,21 +1,15 @@
 /**
- * ChatTrimmer — popup logic
- * Bố cục "số ẩn là nhân vật chính": hero = số tin đang ẩn, cài đặt tự lưu.
+ * ChatTrimmer — popup logic (Concept 5: Thread Accordion)
  */
 (() => {
   'use strict';
 
-  const DEFAULTS = {
-    isEnabled: true,
-    maxVisible: 10,
-    revealStep: 5,
-    sites: { chatgpt: true, claude: true, grok: true, aistudio: true },
-  };
+  const DEFAULTS = { isEnabled: true, maxVisible: 30 };
 
   const $ = (id) => document.getElementById(id);
 
-  let settings = { ...DEFAULTS, sites: { ...DEFAULTS.sites } };
-  let statsData = null;
+  let settings = { ...DEFAULTS };
+  let state = null;
   let saveTimer = null;
   let toastTimer = null;
 
@@ -23,7 +17,7 @@
 
   async function readSettings() {
     const saved = await chrome.storage.sync.get(DEFAULTS);
-    return { ...DEFAULTS, ...saved, sites: { ...DEFAULTS.sites, ...(saved.sites || {}) } };
+    return { ...DEFAULTS, ...saved };
   }
 
   async function currentTab() {
@@ -37,7 +31,7 @@
     try {
       return await chrome.tabs.sendMessage(tab.id, { type, ...(payload || {}) });
     } catch {
-      return null; // content script chưa chạy hoặc trang không được hỗ trợ
+      return null; // chưa có content script / trang không hỗ trợ
     }
   }
 
@@ -49,144 +43,176 @@
     toastTimer = setTimeout(() => { el.className = 'toast'; }, 1800);
   }
 
-  function clampInt(value, min, max, fallback) {
+  function clamp(value, min, max, fallback) {
     const n = parseInt(value, 10);
     if (!Number.isFinite(n)) return fallback;
     return Math.min(max, Math.max(min, n));
   }
 
-  // ---------- Form ----------
-
-  function fillForm() {
-    $('autoHideToggle').checked = settings.isEnabled;
-    $('maxMessages').value = settings.maxVisible;
-    $('showMoreCount').value = settings.revealStep;
-    renderChips();
+  function pct(part, total) {
+    if (!total) return 0;
+    return Math.round((part / total) * 100);
   }
 
-  function renderChips() {
-    document.querySelectorAll('.chip').forEach((chip) => {
-      chip.classList.toggle('on', settings.sites[chip.dataset.site] !== false);
-    });
-  }
+  // ---------- Render ----------
 
-  function collectForm() {
-    const sites = { ...settings.sites };
-    document.querySelectorAll('.chip').forEach((chip) => {
-      sites[chip.dataset.site] = chip.classList.contains('on');
-    });
-    return {
-      isEnabled: $('autoHideToggle').checked,
-      maxVisible: clampInt($('maxMessages').value, 10, 200, settings.maxVisible),
-      revealStep: clampInt($('showMoreCount').value, 5, 50, settings.revealStep),
-      sites,
-    };
-  }
+  function render(data) {
+    const enabled = settings.isEnabled;
 
-  async function save() {
-    settings = { ...settings, ...collectForm() };
-    await chrome.storage.sync.set(settings);
-    await ask('ct:setSettings', { settings });
-    setTimeout(refresh, 250);
-  }
+    $('statePill').textContent = enabled ? 'Active' : 'Off';
+    $('statePill').classList.toggle('off', !enabled);
+    $('headSub').textContent = enabled ? 'Đang gấp tin nhắn cũ' : 'Đang tắt';
+    $('statusDot').style.background = enabled ? 'var(--ok)' : 'var(--text-faint)';
 
-  function scheduleSave() {
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(save, 350);
-  }
+    $('tailValue').textContent = `${settings.maxVisible} tin`;
+    $('tailRange').value = settings.maxVisible;
 
-  function bindSettings() {
-    $('autoHideToggle').addEventListener('change', () => {
-      settings.isEnabled = $('autoHideToggle').checked;
-      save();
-    });
-
-    for (const id of ['maxMessages', 'showMoreCount']) {
-      $(id).addEventListener('input', scheduleSave);
-      $(id).addEventListener('change', () => {
-        const min = id === 'maxMessages' ? 10 : 5;
-        const max = id === 'maxMessages' ? 200 : 50;
-        $(id).value = clampInt($(id).value, min, max, settings[id === 'maxMessages' ? 'maxVisible' : 'revealStep']);
-        save();
-      });
+    if (!data) {
+      $('threadTitle').textContent = 'Không hỗ trợ';
+      $('headSub').textContent = 'Mở một cuộc trò chuyện trên chatgpt.com rồi thử lại';
+      $('foldCount').textContent = '0 folds';
+      $('folds').innerHTML = '<div class="empty">Không tìm thấy cuộc trò chuyện nào</div>';
+      $('tailCount').textContent = '0';
+      $('tailDesc').textContent = 'Chưa có dữ liệu.';
+      $('unfoldMeta').textContent = '(0 tin)';
+      $('unfoldAllBtn').disabled = true;
+      $('statUser').textContent = 'Bạn: 0 (0%)';
+      $('statAi').textContent = 'ChatGPT: 0 (0%)';
+      return;
     }
 
-    $('platformChips').addEventListener('click', (event) => {
-      const chip = event.target.closest('.chip');
-      if (!chip) return;
-      chip.classList.toggle('on');
-      save();
+    $('threadTitle').textContent = data.title || 'ChatGPT';
+    $('tailCount').textContent = data.tail;
+    $('foldCount').textContent = `${data.folds.length} folds`;
+    $('unfoldMeta').textContent = `(${data.hidden} tin)`;
+    $('unfoldAllBtn').disabled = data.hidden === 0;
+    $('statUser').textContent = `Bạn: ${data.user} (${pct(data.user, data.total)}%)`;
+    $('statAi').textContent = `ChatGPT: ${data.ai} (${pct(data.ai, data.total)}%)`;
+
+    $('tailDesc').textContent = data.hidden
+      ? `${data.hidden} tin cũ hơn đang được gấp lại. Trang cuộn tức thì.`
+      : 'Không có tin nào bị gấp. Cuộc trò chuyện đang ở trạng thái gọn.';
+
+    renderFolds(data.folds);
+  }
+
+  function renderFolds(folds) {
+    const box = $('folds');
+    if (!folds.length) {
+      box.innerHTML = '<div class="empty">Không có tin nào bị gấp</div>';
+      return;
+    }
+    box.innerHTML = folds
+      .map((f, i) => `
+        <div class="fold-row">
+          <div class="fold-left">
+            <span class="fold-index">${i + 1}</span>
+            <div class="fold-info">
+              <div class="fold-range">
+                <span>Tin ${f.from} — ${f.to}</span>
+                <span class="fold-tag">Folded</span>
+              </div>
+              <div class="fold-desc" title="${escapeAttr(f.preview)}">${escapeHtml(f.preview)}</div>
+            </div>
+          </div>
+          <button class="fold-expand" data-from="${f.from}" data-to="${f.to}" type="button">Expand</button>
+        </div>`)
+      .join('');
+
+    box.querySelectorAll('.fold-expand').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const from = Number(btn.dataset.from);
+        const to = Number(btn.dataset.to);
+        const res = await ask('ct:unfoldFold', { from, to });
+        if (!res) { toast('Chưa kết nối được trang', true); return; }
+        await refresh();
+        toast(`Đã mở tin ${from} — ${to}`);
+      });
     });
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text == null ? '' : String(text);
+    return div.innerHTML;
+  }
+
+  function escapeAttr(text) {
+    return escapeHtml(text).replace(/"/g, '&quot;');
   }
 
   // ---------- Số liệu ----------
 
   async function refresh() {
-    const res = await ask('ct:detailed');
-    const data = res && res.data ? res.data : null;
-
-    statsData = data;
-    $('hiddenCount').textContent = data ? (data.hidden || 0) : 0;
-    $('statUser').textContent = data ? data.totalUser : 0;
-    $('statAi').textContent = data ? data.totalAi : 0;
-    $('statTotal').textContent = data ? data.totalAll : 0;
-
-    const tag = $('currentPlatform');
-    if (data && data.platform) {
-      tag.textContent = data.platform;
-      tag.className = 'platform-tag ok';
-    } else {
-      tag.textContent = 'Không hỗ trợ';
-      tag.className = 'platform-tag';
-    }
-
-    $('revealBtn').disabled = !data || !data.hidden;
+    const res = await ask('ct:state');
+    state = res && res.data ? res.data : null;
+    render(state);
   }
 
-  // ---------- Hành động ----------
+  // ---------- Cài đặt ----------
 
-  function bindActions() {
-    $('revealBtn').addEventListener('click', async () => {
-      const res = await ask('ct:revealAll');
-      if (!res) {
-        toast('Chưa kết nối được trang', true);
-        return;
-      }
-      await refresh();
-      toast('Đã hiện tất cả tin nhắn');
-    });
-
-    $('refreshBtn').addEventListener('click', async () => {
-      const btn = $('refreshBtn');
-      btn.classList.add('spinning');
-      await refresh();
-      setTimeout(() => btn.classList.remove('spinning'), 350);
-    });
-
-    $('exportCsvBtn').addEventListener('click', exportCsv);
+  async function save() {
+    await chrome.storage.sync.set(settings);
+    const res = await ask('ct:setSettings', { settings });
+    if (res) await refresh();
+    else render(state);
   }
+
+  function scheduleSave() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(save, 300);
+  }
+
+  function bind() {
+    $('statePill').addEventListener('click', async () => {
+      settings.isEnabled = !settings.isEnabled;
+      await chrome.storage.sync.set({ isEnabled: settings.isEnabled });
+      const res = await ask('ct:setSettings', { settings });
+      if (res) await refresh();
+      else render(state);
+    });
+
+    $('tailRange').addEventListener('input', () => {
+      settings.maxVisible = clamp($('tailRange').value, 10, 100, settings.maxVisible);
+      $('tailValue').textContent = `${settings.maxVisible} tin`;
+      scheduleSave();
+    });
+
+    $('unfoldAllBtn').addEventListener('click', async () => {
+      const res = await ask('ct:unfoldAll');
+      if (!res) { toast('Chưa kết nối được trang', true); return; }
+      await refresh();
+      toast('Đã mở toàn bộ cuộc trò chuyện');
+    });
+
+    $('exportBtn').addEventListener('click', exportCsv);
+  }
+
+  // ---------- CSV ----------
 
   function csvCell(value) {
     return `"${String(value).replace(/"/g, '""').replace(/\r?\n/g, ' ')}"`;
   }
 
-  function exportCsv() {
-    if (!statsData || !statsData.messages.length) {
+  async function exportCsv() {
+    const res = await ask('ct:export');
+    const rows = res && res.data ? res.data : null;
+    if (!rows || !rows.length) {
       toast('Chưa có dữ liệu để xuất', true);
       return;
     }
 
-    const rows = [['STT', 'Nguoi gui', 'Noi dung', 'Do dai'].join(',')];
-    for (const m of statsData.messages) {
-      rows.push([m.index, csvCell(m.sender), csvCell(m.content), m.length].join(','));
+    const lines = [['STT', 'Nguoi gui', 'Noi dung', 'Do dai'].join(',')];
+    for (const r of rows) {
+      lines.push([r.index, csvCell(r.sender), csvCell(r.content), r.length].join(','));
     }
-    rows.push('');
-    rows.push(['Tong tin cua ban', statsData.totalUser].join(','));
-    rows.push(['Tong tin AI', statsData.totalAi].join(','));
-    rows.push(['Tong cong', statsData.totalAll].join(','));
-    rows.push(['Nen tang', statsData.platform].join(','));
+    lines.push('');
+    lines.push(['Tong tin cua ban', state ? state.user : ''].join(','));
+    lines.push(['Tong tin ChatGPT', state ? state.ai : ''].join(','));
+    lines.push(['Tong cong', rows.length].join(','));
+    lines.push(['Ho so', state ? state.title : ''].join(','));
 
-    const blob = new Blob(['\uFEFF' + rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob(['\uFEFF' + lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
@@ -200,10 +226,8 @@
 
   async function init() {
     settings = await readSettings();
-    fillForm();
-    bindSettings();
-    bindActions();
-    refresh();
+    bind();
+    await refresh();
   }
 
   document.addEventListener('DOMContentLoaded', init);

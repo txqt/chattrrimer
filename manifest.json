@@ -1,29 +1,22 @@
 {
   "manifest_version": 3,
   "name": "ChatTrimmer",
-  "version": "1.0.0",
-  "description": "Giữ cuộc trò chuyện AI nhẹ và mượt: tự động ẩn tin nhắn cũ trên ChatGPT, Claude, Grok, Google AI Studio.",
+  "version": "1.1.0",
+  "description": "Gấp tin nhắn cũ trong ChatGPT để cuộc trò chuyện dài không còn lag.",
 
   "permissions": [
-    "storage",
-    "activeTab"
+    "storage"
   ],
 
   "host_permissions": [
-    "https://chat.openai.com/*",
     "https://chatgpt.com/*",
-    "https://claude.ai/*",
-    "https://grok.com/*",
-    "https://aistudio.google.com/*"
+    "https://chat.openai.com/*"
   ],
 
   "content_scripts": [{
     "matches": [
-      "https://chat.openai.com/*",
       "https://chatgpt.com/*",
-      "https://claude.ai/*",
-      "https://grok.com/*",
-      "https://aistudio.google.com/*"
+      "https://chat.openai.com/*"
     ],
     "js": ["src/content.js"],
     "css": ["styles.css"],

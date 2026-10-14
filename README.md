@@ -1,24 +1,20 @@
 # ChatTrimmer
 
-Giữ cuộc trò chuyện AI nhẹ và mượt — tự động ẩn bớt tin nhắn cũ trong khung chat để trang đỡ lag, kèm nút hiện thêm khi cần xem lại.
+Gấp tin nhắn cũ trong **ChatGPT** để cuộc trò chuyện dài không còn lag. Tin bị gấp vẫn nằm trong trang, mở lại bất cứ lúc nào.
 
 ## Tính năng
 
-- **Tự động ẩn tin cũ**: chỉ giữ N tin gần nhất, phần cũ hơn bị ẩn khỏi giao diện (vẫn còn trong DOM, không mất dữ liệu).
-- **Nút "hiện thêm"**: hiện dần số tin bị ẩn ngay trên trang.
-- **Thống kê**: đếm tin của bạn / tin AI / tổng, danh sách tin nhắn, bấm để nhảy tới, xuất CSV.
-- **Bật/tắt theo từng nền tảng**.
+- **Gấp tin cũ**: chỉ giữ lại N tin gần nhất, phần cũ hơn được gấp lại khỏi giao diện.
+- **Conversation Fold Map**: xem phần đã gấp chia thành từng khối và **mở riêng từng khối**.
+- **Mở toàn bộ**: một nút trả lại toàn bộ cuộc trò chuyện.
+- **Tail Window Size**: thanh trượt chỉnh số tin giữ lại (10–100).
+- **Thống kê người gửi**: tỉ lệ tin của bạn so với ChatGPT.
+- **Xuất CSV** toàn bộ cuộc trò chuyện.
+- **Nút "Mở … tin"** ngay trên trang khi có tin đang bị gấp.
 
-## Nền tảng hỗ trợ
+## Nền tảng
 
-| Nền tảng | Trạng thái |
-|---|---|
-| ChatGPT (chatgpt.com) | Ổn định |
-| Google AI Studio | Beta |
-| Claude | Beta |
-| Grok | Beta |
-
-> Các nền tảng "Beta" dùng selector chưa kiểm chứng đầy đủ; nếu DOM của họ đổi, có thể cần cập nhật lại.
+Chỉ **ChatGPT** (`chatgpt.com`, `chat.openai.com`). Các nền tảng khác chưa hỗ trợ.
 
 ## Cài đặt (load unpacked)
 
@@ -26,29 +22,26 @@ Giữ cuộc trò chuyện AI nhẹ và mượt — tự động ẩn bớt tin 
 2. Mở `chrome://extensions/`.
 3. Bật **Developer mode**.
 4. Chọn **Load unpacked** → trỏ tới thư mục extension.
-5. Mở một trang chat AI và tải lại trang.
-
-## Cấu hình
-
-Trong popup, tab **Cài đặt**:
-
-- Bật/tắt tự động ẩn.
-- Số tin nhắn hiển thị: 10–200.
-- Số tin mỗi lần "hiện thêm": 5–50.
-- Chọn nền tảng áp dụng.
-
-Tab **Thống kê**: xem số liệu, danh sách tin nhắn, xuất CSV.
+5. Mở một cuộc trò chuyện trên ChatGPT và tải lại trang.
 
 ## Cấu trúc
 
 ```
-manifest.json        # Manifest V3
-popup.html/.css      # Giao diện popup
-src/popup.js         # Logic popup (settings + thống kê)
-src/content.js       # Content script: ẩn/hiện tin nhắn trên trang chat
-styles.css           # Style chèn vào trang (class ẩn, nút hiện thêm)
-icons/               # Icon 16/48/128
+manifest.json         # Manifest V3 (chỉ host ChatGPT)
+popup.html / .css     # Giao diện popup — "Thread Accordion"
+src/popup.js          # Logic popup (fold map, thống kê, CSV)
+src/content.js        # Content script: gấp/mở tin nhắn trên trang
+styles.css            # Style chèn vào trang (class ẩn, nút trên trang)
+fonts/                # Plus Jakarta Sans + JetBrains Mono (OFL), bundle sẵn
+icons/                # Icon 16/48/128
+STITCH-PROMPT.md      # Prompt thiết kế UI
 ```
+
+## Ghi chú kỹ thuật
+
+- Font được **bundle trong `fonts/`** vì extension MV3 không nạp được font từ CDN.
+- Không dùng thư viện ngoài; toàn bộ CSS/JS viết tay.
+- Kích thước một fold cố định 50 tin (`FOLD_SIZE` trong `src/content.js`).
 
 ## License
 

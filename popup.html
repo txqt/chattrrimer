@@ -4,85 +4,71 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ChatTrimmer</title>
+  <link rel="stylesheet" href="fonts/fonts.css">
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
-  <div class="app">
+  <div>
 
-    <header class="topbar">
-      <div class="brand">
-        <span class="brand-mark">CT</span>
-        <span class="brand-name">ChatTrimmer</span>
+    <!-- Header & state -->
+    <header class="head">
+      <div class="head-text">
+        <h1 class="thread-title">
+          <span id="threadTitle">ChatGPT</span>
+          <span class="dot dot-live" id="statusDot"></span>
+        </h1>
+        <p class="head-sub" id="headSub">Đang gấp tin nhắn cũ</p>
       </div>
-      <button class="icon-btn" id="refreshBtn" type="button" title="Làm mới số liệu" aria-label="Làm mới">↻</button>
+      <button class="state-pill" id="statePill" type="button">Active</button>
     </header>
 
-    <section class="hero">
-      <div class="hero-halo" aria-hidden="true"></div>
-      <span class="hero-number" id="hiddenCount">0</span>
-      <span class="hero-label">tin đang được ẩn</span>
-    </section>
-
-    <div class="hero-actions">
-      <button class="btn btn-primary" id="revealBtn" type="button">Hiện hết</button>
-      <button class="btn btn-secondary" id="exportCsvBtn" type="button">Xuất CSV</button>
-    </div>
-
-    <div class="divider"></div>
-
-    <section class="panel">
-      <div class="row">
-        <div class="row-text">
-          <span class="row-title">Tự động ẩn</span>
-          <p class="row-sub">Ẩn tin cũ để trang nhẹ hơn</p>
-        </div>
-        <label class="switch">
-          <input type="checkbox" id="autoHideToggle">
-          <span class="switch-track"></span>
-        </label>
+    <!-- Fold map -->
+    <section class="fold-map" id="foldSection">
+      <div class="fold-map-head">
+        <span class="label">Conversation Fold Map</span>
+        <span class="label accent" id="foldCount">0 folds</span>
       </div>
 
-      <div class="row column">
-        <div class="row-text">
-          <span class="row-title">Giữ lại</span>
-          <p class="row-sub">Số tin gần nhất hiển thị (10–200)</p>
-        </div>
-        <input type="number" id="maxMessages" class="text-input" min="10" max="200" value="10">
-      </div>
+      <div class="folds" id="folds"></div>
 
-      <div class="row column">
-        <div class="row-text">
-          <span class="row-title">Show More</span>
-          <p class="row-sub">Số tin hiện thêm mỗi lần (5–50)</p>
+      <div class="tail-card">
+        <div class="tail-head">
+          <span class="dot dot-live"></span>
+          <span class="tail-title">Active Tail: <span id="tailCount">0</span> tin cuối</span>
+          <span class="tag" id="tailTag">Visible</span>
         </div>
-        <input type="number" id="showMoreCount" class="text-input" min="5" max="50" value="5">
-      </div>
-
-      <div class="row column">
-        <div class="row-text">
-          <span class="row-title">Nền tảng</span>
-          <p class="row-sub">Bật/tắt nơi ChatTrimmer hoạt động</p>
-        </div>
-        <div class="chips" id="platformChips">
-          <button class="chip" type="button" data-site="chatgpt">ChatGPT</button>
-          <button class="chip" type="button" data-site="claude">Claude</button>
-          <button class="chip" type="button" data-site="grok">Grok</button>
-          <button class="chip" type="button" data-site="aistudio">AI Studio</button>
-        </div>
+        <p class="tail-desc" id="tailDesc">Chưa có tin nhắn nào bị gấp.</p>
+        <button class="btn-primary" id="unfoldAllBtn" type="button">
+          <span>Mở toàn bộ cuộc trò chuyện</span>
+          <span class="btn-meta" id="unfoldMeta">(0 tin)</span>
+        </button>
       </div>
     </section>
 
-    <div class="divider"></div>
-
-    <footer class="summary">
-      <div class="summary-counts">
-        <span><b id="statUser">0</b> bạn</span>
-        <span class="dot">·</span>
-        <span><b id="statAi">0</b> AI</span>
-        <span class="dot">·</span>
-        <span><b id="statTotal">0</b> tổng</span>
+    <!-- Trim stepper -->
+    <section class="stepper">
+      <div class="stepper-head">
+        <span class="stepper-label">Tail Window Size</span>
+        <span class="mono accent" id="tailValue">30 tin</span>
       </div>
-      <span class="platform-tag" id="currentPlatform">—</span>
+      <input type="range" id="tailRange" min="10" max="100" step="5" value="30" aria-label="Số tin giữ lại">
+      <div class="stepper-scale">
+        <span>Gọn (10)</span>
+        <span>Chuẩn (30)</span>
+        <span>Rộng (100)</span>
+      </div>
+    </section>
+
+    <!-- Sender stats -->
+    <section class="stats-row">
+      <div class="stat"><span class="dot dot-user"></span><span class="mono" id="statUser">Bạn: 0 (0%)</span></div>
+      <div class="stat"><span class="dot dot-ai"></span><span class="mono" id="statAi">ChatGPT: 0 (0%)</span></div>
+      <button class="link-btn" id="exportBtn" type="button">Export CSV</button>
+    </section>
+
+    <!-- Footer -->
+    <footer class="foot">
+      <span>Auto-trimming: <strong>ChatGPT</strong></span>
     </footer>
 
     <div class="toast" id="toast" role="status"></div>
