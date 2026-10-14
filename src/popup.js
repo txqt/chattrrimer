@@ -59,7 +59,9 @@
 
   function setTab(name) {
     document.querySelectorAll('.pill-tab').forEach((b) => {
-      b.classList.toggle('active', b.dataset.tab === name);
+      const active = b.dataset.tab === name;
+      b.classList.toggle('active', active);
+      b.setAttribute('aria-selected', String(active));
     });
     document.querySelectorAll('.tab-panel').forEach((p) => {
       p.classList.toggle('active', p.id === `${name}-tab`);
