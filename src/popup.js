@@ -37,14 +37,42 @@
     return tab || null;
   }
 
+  function sendMessage(tabId, message) {
+    return new Promise((resolve) => {
+      chrome.tabs.sendMessage(tabId, message, (response) => {
+        resolve(chrome.runtime.lastError ? undefined : response);
+      });
+    });
+  }
+
+  // Chèn content script khi tab được mở từ trước lúc extension reload.
+  async function injectContent(tabId) {
+    try {
+      await chrome.scripting.executeScript({
+        target: { tabId },
+        files: ['src/i18n.js', 'src/content.js'],
+      });
+      return true;
+    } catch {
+      return false; // tab không phải trang được hỗ trợ
+    }
+  }
+
   async function ask(type, payload) {
     const tab = await currentTab();
     if (!tab || !tab.id) return null;
-    try {
-      return await chrome.tabs.sendMessage(tab.id, { type, ...(payload || {}) });
-    } catch {
-      return null; // chưa có content script / trang không hỗ trợ
+
+    const message = { type, ...(payload || {}) };
+    let res = await sendMessage(tab.id, message);
+    if (res !== undefined) return res;
+
+    // Không có ai trả lời → chèn lại rồi thử một lần nữa.
+    const injected = await injectContent(tab.id);
+    if (injected) res = await sendMessage(tab.id, message);
+    if (res === undefined) {
+      console.warn('[ChatTrimmer] không nhận được phản hồi từ tab', tab.url || tab.id, '| đã chèn lại:', injected);
     }
+    return res === undefined ? null : res;
   }
 
   function toast(message, isError) {

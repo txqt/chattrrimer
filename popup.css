@@ -63,7 +63,7 @@ body {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.head-sub { font-size: 11px; color: var(--text-dim); }
+.head-sub { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
 
 .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; flex: none; }
 .dot-live { background: var(--ok); }
