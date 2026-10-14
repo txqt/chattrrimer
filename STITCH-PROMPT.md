@@ -1,10 +1,83 @@
 # Prompt cho Google Stitch — ChatTrimmer popup
 
-Copy nguyên khối trong fence bên dưới, dán vào ô prompt của Stitch.
+Hai chế độ:
+- **Prompt mở** — giao toàn quyền sáng tạo cho Stitch, chỉ chốt bài toán. Dùng khi muốn phá lối mòn.
+- **Prompt đầy đủ (Affirm)** — khoá cứng bố cục + màu theo DESIGN.md. Dùng khi cần khớp bản đang chạy.
 
 ---
 
-## Prompt đầy đủ (khuyên dùng)
+## 1. Prompt MỞ (không giới hạn) — khuyên dùng khi muốn ý mới
+
+```text
+You have full creative freedom. Do not copy any existing design system — invent one.
+
+PRODUCT
+ChatTrimmer is a tiny Chrome extension that makes long AI chat threads feel light
+again. People who use ChatGPT, Claude, Grok or Google AI Studio every day end up with
+conversations hundreds of messages long, and the page turns sluggish. ChatTrimmer
+quietly hides the older messages so the thread stays fast, and lets you bring them back
+when you need them. It should feel like a quiet utility you trust — not a toy, not a
+dashboard product, not a marketing page.
+
+WHAT THE USER MUST BE ABLE TO DO IN THE POPUP
+- Instantly see how many messages are currently hidden.
+- Bring the hidden messages back.
+- Change how aggressively it trims (how many recent messages stay visible).
+- Turn the tool on/off, and pick which AI sites it works on.
+- Get a rough sense of thread size (how many messages are theirs vs the AI's).
+- Export the conversation to CSV.
+
+FREEDOM
+Everything else is yours: layout, navigation model, information hierarchy, color,
+typography, iconography, illustration, motion — dark, light, or both. You may drop the
+tabs, add tabs, use one scrollable surface, a stepper, a status ring, a canvas, a mini
+dashboard — anything. You may ignore the idea of a big "hidden count" number entirely.
+Surprise me. Avoid the default "settings list" look that almost every extension popup has.
+
+WHAT TO RETURN
+Five clearly different directions, not five variations of one. For each: a name, one
+line on the concept, and the screen. Make at least one direction dramatically minimal
+and at least one dense and data-rich.
+
+THE ONLY FIXED THINGS
+- It is a Chrome extension popup: roughly 320–400px wide, variable height.
+- It is opened for a few seconds at a time; the real question in the user's head is
+  "is my chat OK, and can I get my old messages back?".
+- No login. No onboarding wizard. No marketing copy.
+```
+
+### Prompt mở, bản ngắn
+
+```text
+Invent a fresh UI for a Chrome extension popup called ChatTrimmer. It hides old
+messages in long AI chats (ChatGPT/Claude/Grok/AI Studio) so the thread stays fast,
+and lets you bring them back. In the popup the user must: see how many messages are
+hidden, restore them, set how many recent messages to keep, toggle the tool on/off,
+pick supported sites, see a rough their-messages vs AI-messages count, and export CSV.
+
+No design system, no reference UI — you decide everything: layout, navigation, color,
+type, density, motion, dark or light. Ignore the usual "settings list" popup look.
+Popup only, ~360px wide. Give me 5 genuinely different directions with names.
+```
+
+### Gợi ý "mood" để Stitch đổi hướng (ghép vào prompt mở)
+
+Chọn 1–2 câu, không cần hết:
+
+```text
+- Make it feel like a physical instrument: one big dial/ring the user turns.
+- Make it feel like a health check: calm, reassuring, "your thread is healthy".
+- Make it feel editorial: oversized type, quiet, almost a magazine page.
+- Make it feel like a control room: dense, monospaced numbers, everything visible at once.
+- Make it feel soft and human: rounded, playful, a little character living in the corner.
+```
+
+---
+
+## 2. Prompt đầy đủ (hệ Affirm, có ràng buộc)
+
+Dùng khi cần Stitch ra đúng bản đang chạy: bố cục "hero number", dark indigo-black,
+glow periwinkle.
 
 ```text
 Design a dark, premium browser-extension popup UI for "ChatTrimmer" — a small tool
@@ -79,30 +152,11 @@ CONSTRAINTS
 
 ---
 
-## Prompt ngắn (để Stitch nhả nhiều biến thể nhanh)
-
-```text
-A 360px browser-extension popup, dark consumer-fintech style, indigo-black #101820 canvas.
-Top bar: round white "CT" badge + "ChatTrimmer" wordmark (thin) + circular ghost refresh button.
-Hero: huge thin-weight white number "37" centered on a soft periwinkle #9cadfc radial glow,
-caption "tin đang được ẩn" in #9f9f9f.
-Two full-pill buttons: white "Hiện hết" (dark text) and ghost "Xuất CSV" (1px white border).
-Then a 1px indigo-gradient hairline, then settings rows separated by the same hairline:
-toggle "Tự động ẩn", white 48px number inputs for "Giữ lại" (10) and "Show More" (5),
-and four pill chips ChatGPT / Claude / Grok / AI Studio (active = #e2e2ff bg + #212189 text,
-inactive = #1b1b30 bg + #9f9f9f text).
-Footer: "18 bạn · 19 AI · 37 tổng" plus a pale indigo "ChatGPT" tag.
-Radii: cards 24px, inputs 4px, pills 96px. Depth = periwinkle glow rgba(168,169,252,.25),
-no gray shadows. Font Inter, hero number weight 300, labels 500.
-```
-
----
-
 ## Mẹo dùng Stitch
 
-1. Chạy prompt ngắn trước để lấy 3–4 biến thể bố cục, chọn cái ưng.
-2. Sau đó dùng prompt đầy đủ để "chốt" chi tiết màu/radius/type trên biến thể đã chọn.
-3. Stitch hay vẽ dư shadow xám và tô nút bằng màu accent — nhắc lại câu
-   "no gray shadows, primary button stays white" nếu nó làm sai.
-4. Muốn thêm màn hình khác (trang Options, onboarding) thì nói rõ
-   "same design system, 480px wide options page with two columns".
+1. Stitch ra nhiều biến thể — chạy **prompt mở** trước để lấy hướng, rồi mới siết bằng
+   prompt có ràng buộc (hoặc ghép thêm mục "mood").
+2. Stitch hay tự thêm shadow xám, tô nút bằng màu accent, và bôi gradient khắp nơi.
+   Nếu không muốn thì nhắc lại đúng câu phủ định tương ứng.
+3. Muốn màn hình khác (trang Options, onboarding) thì thêm
+   "same design language, 480px wide options page, two columns".
