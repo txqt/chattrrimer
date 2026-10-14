@@ -13,6 +13,23 @@
   let saveTimer = null;
   let toastTimer = null;
 
+  // ---------- i18n ----------
+
+  function t(key, subs) {
+    try {
+      return chrome.i18n.getMessage(key, subs) || key;
+    } catch {
+      return key;
+    }
+  }
+
+  function localizeStatic() {
+    document.querySelectorAll('[data-i18n]').forEach((el) => {
+      const msg = t(el.dataset.i18n);
+      if (msg) el.textContent = msg;
+    });
+  }
+
   // ---------- Hạ tầng ----------
 
   async function readSettings() {
@@ -61,37 +78,38 @@
 
     $('statePill').textContent = enabled ? 'Active' : 'Off';
     $('statePill').classList.toggle('off', !enabled);
-    $('headSub').textContent = enabled ? 'Đang gấp tin nhắn cũ' : 'Đang tắt';
+    $('headSub').textContent = enabled ? t('headFolding') : t('headOff');
     $('statusDot').style.background = enabled ? 'var(--ok)' : 'var(--text-faint)';
 
-    $('tailValue').textContent = `${settings.maxVisible} tin`;
+    $('tailValue').textContent = t('stepperValue', String(settings.maxVisible));
     $('tailRange').value = settings.maxVisible;
+    $('unfoldLabel').textContent = t('unfoldAll');
 
     if (!data) {
-      $('threadTitle').textContent = 'Không hỗ trợ';
-      $('headSub').textContent = 'Mở một cuộc trò chuyện trên chatgpt.com rồi thử lại';
+      $('threadTitle').textContent = t('unsupportedTitle');
+      $('headSub').textContent = t('unsupportedSub');
       $('foldCount').textContent = '0 folds';
-      $('folds').innerHTML = '<div class="empty">Không tìm thấy cuộc trò chuyện nào</div>';
-      $('tailCount').textContent = '0';
-      $('tailDesc').textContent = 'Chưa có dữ liệu.';
-      $('unfoldMeta').textContent = '(0 tin)';
+      $('folds').innerHTML = `<div class="empty">${escapeHtml(t('emptyNoConversation'))}</div>`;
+      $('tailTitle').textContent = t('headTail', '0');
+      $('tailDesc').textContent = '';
+      $('unfoldMeta').textContent = t('unfoldMeta', '0');
       $('unfoldAllBtn').disabled = true;
-      $('statUser').textContent = 'Bạn: 0 (0%)';
-      $('statAi').textContent = 'ChatGPT: 0 (0%)';
+      $('statUser').textContent = t('statYou', ['0', '0']);
+      $('statAi').textContent = t('statAi', ['0', '0']);
       return;
     }
 
     $('threadTitle').textContent = data.title || 'ChatGPT';
-    $('tailCount').textContent = data.tail;
+    $('tailTitle').textContent = t('headTail', String(data.tail));
     $('foldCount').textContent = `${data.folds.length} folds`;
-    $('unfoldMeta').textContent = `(${data.hidden} tin)`;
+    $('unfoldMeta').textContent = t('unfoldMeta', String(data.hidden));
     $('unfoldAllBtn').disabled = data.hidden === 0;
-    $('statUser').textContent = `Bạn: ${data.user} (${pct(data.user, data.total)}%)`;
-    $('statAi').textContent = `ChatGPT: ${data.ai} (${pct(data.ai, data.total)}%)`;
+    $('statUser').textContent = t('statYou', [String(data.user), String(pct(data.user, data.total))]);
+    $('statAi').textContent = t('statAi', [String(data.ai), String(pct(data.ai, data.total))]);
 
     $('tailDesc').textContent = data.hidden
-      ? `${data.hidden} tin cũ hơn đang được gấp lại. Trang cuộn tức thì.`
-      : 'Không có tin nào bị gấp. Cuộc trò chuyện đang ở trạng thái gọn.';
+      ? t('tailDescHidden', String(data.hidden))
+      : t('tailDescNone');
 
     renderFolds(data.folds);
   }
@@ -99,7 +117,7 @@
   function renderFolds(folds) {
     const box = $('folds');
     if (!folds.length) {
-      box.innerHTML = '<div class="empty">Không có tin nào bị gấp</div>';
+      box.innerHTML = `<div class="empty">${escapeHtml(t('emptyNoFolds'))}</div>`;
       return;
     }
     box.innerHTML = folds
@@ -109,7 +127,7 @@
             <span class="fold-index">${i + 1}</span>
             <div class="fold-info">
               <div class="fold-range">
-                <span>Tin ${f.from} — ${f.to}</span>
+                <span>${escapeHtml(t('foldRange', [String(f.from), String(f.to)]))}</span>
                 <span class="fold-tag">Folded</span>
               </div>
               <div class="fold-desc" title="${escapeAttr(f.preview)}">${escapeHtml(f.preview)}</div>
@@ -124,9 +142,9 @@
         const from = Number(btn.dataset.from);
         const to = Number(btn.dataset.to);
         const res = await ask('ct:unfoldFold', { from, to });
-        if (!res) { toast('Chưa kết nối được trang', true); return; }
+        if (!res) { toast(t('toastNoConnection'), true); return; }
         await refresh();
-        toast(`Đã mở tin ${from} — ${to}`);
+        toast(t('toastUnfolded', [String(from), String(to)]));
       });
     });
   }
@@ -174,15 +192,15 @@
 
     $('tailRange').addEventListener('input', () => {
       settings.maxVisible = clamp($('tailRange').value, 10, 100, settings.maxVisible);
-      $('tailValue').textContent = `${settings.maxVisible} tin`;
+      $('tailValue').textContent = t('stepperValue', String(settings.maxVisible));
       scheduleSave();
     });
 
     $('unfoldAllBtn').addEventListener('click', async () => {
       const res = await ask('ct:unfoldAll');
-      if (!res) { toast('Chưa kết nối được trang', true); return; }
+      if (!res) { toast(t('toastNoConnection'), true); return; }
       await refresh();
-      toast('Đã mở toàn bộ cuộc trò chuyện');
+      toast(t('toastUnfoldAll'));
     });
 
     $('exportBtn').addEventListener('click', exportCsv);
@@ -198,19 +216,19 @@
     const res = await ask('ct:export');
     const rows = res && res.data ? res.data : null;
     if (!rows || !rows.length) {
-      toast('Chưa có dữ liệu để xuất', true);
+      toast(t('toastNoData'), true);
       return;
     }
 
-    const lines = [['STT', 'Nguoi gui', 'Noi dung', 'Do dai'].join(',')];
+    const lines = [[t('csvIndex'), t('csvSender'), t('csvContent'), t('csvLength')].join(',')];
     for (const r of rows) {
       lines.push([r.index, csvCell(r.sender), csvCell(r.content), r.length].join(','));
     }
     lines.push('');
-    lines.push(['Tong tin cua ban', state ? state.user : ''].join(','));
-    lines.push(['Tong tin ChatGPT', state ? state.ai : ''].join(','));
-    lines.push(['Tong cong', rows.length].join(','));
-    lines.push(['Ho so', state ? state.title : ''].join(','));
+    lines.push([t('csvYours'), state ? state.user : ''].join(','));
+    lines.push([t('csvAi'), state ? state.ai : ''].join(','));
+    lines.push([t('csvTotal'), rows.length].join(','));
+    lines.push([t('csvThread'), csvCell(state ? state.title : '')].join(','));
 
     const blob = new Blob(['\uFEFF' + lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
@@ -219,12 +237,13 @@
     link.download = `chattrrimer-${new Date().toISOString().slice(0, 10)}.csv`;
     link.click();
     URL.revokeObjectURL(url);
-    toast('Đã xuất file CSV');
+    toast(t('toastExported'));
   }
 
   // ---------- Khởi động ----------
 
   async function init() {
+    localizeStatic();
     settings = await readSettings();
     bind();
     await refresh();

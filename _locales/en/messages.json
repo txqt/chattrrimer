@@ -1,0 +1,45 @@
+{
+  "extName": { "message": "ChatTrimmer" },
+  "extDesc": { "message": "Fold old messages in ChatGPT so long conversations stay fast." },
+
+  "headFolding": { "message": "Folding old messages" },
+  "headOff": { "message": "Turned off" },
+  "headTail": { "message": "Active Tail: last $1 messages" },
+  "tailDescHidden": { "message": "$1 older messages are folded away. Scrolling stays instant." },
+  "tailDescNone": { "message": "Nothing is folded. The conversation is already neat." },
+  "unfoldAll": { "message": "Unfold entire conversation" },
+  "unfoldMeta": { "message": "($1 messages)" },
+
+  "stepperValue": { "message": "$1 messages" },
+  "scaleCompact": { "message": "Compact (10)" },
+  "scaleStandard": { "message": "Standard (30)" },
+  "scaleWide": { "message": "Wide (100)" },
+
+  "statYou": { "message": "You: $1 ($2%)" },
+  "statAi": { "message": "ChatGPT: $1 ($2%)" },
+
+  "foldRange": { "message": "Messages $1 — $2" },
+  "emptyNoFolds": { "message": "Nothing is folded" },
+  "emptyNoConversation": { "message": "No conversation found" },
+  "unsupportedTitle": { "message": "Unsupported" },
+  "unsupportedSub": { "message": "Open a conversation on chatgpt.com and try again" },
+  "footLabel": { "message": "Auto-trimming:" },
+
+  "toastUnfolded": { "message": "Unfolded messages $1 — $2" },
+  "toastUnfoldAll": { "message": "Entire conversation unfolded" },
+  "toastNoData": { "message": "Nothing to export yet" },
+  "toastExported": { "message": "CSV exported" },
+  "toastNoConnection": { "message": "Can't reach the page" },
+
+  "contentOpen": { "message": "Unfold $1 · $2 folded" },
+  "senderYou": { "message": "You" },
+
+  "csvIndex": { "message": "No." },
+  "csvSender": { "message": "Sender" },
+  "csvContent": { "message": "Content" },
+  "csvLength": { "message": "Length" },
+  "csvYours": { "message": "Your messages" },
+  "csvAi": { "message": "ChatGPT messages" },
+  "csvTotal": { "message": "Total" },
+  "csvThread": { "message": "Thread" }
+}

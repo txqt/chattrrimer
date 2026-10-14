@@ -43,6 +43,14 @@
     return t;
   }
 
+  function t(key, subs) {
+    try {
+      return chrome.i18n.getMessage(key, subs) || key;
+    } catch {
+      return key;
+    }
+  }
+
   function isUser(el) {
     return ((el.getAttribute('data-content-search-unit-key') || '').endsWith(':user'));
   }
@@ -185,7 +193,7 @@
     const folds = computeFolds();
     const newest = folds[folds.length - 1];
     button.hidden = false;
-    button.textContent = `Mở ${newest ? newest.count : n} tin · ${n} đang gấp`;
+    button.textContent = t('contentOpen', [String(newest ? newest.count : n), String(n)]);
   }
 
   // ---------- Theo dõi DOM ----------
@@ -240,7 +248,7 @@
     return collectMessages().map((el, i) => {
       const text = cleanText(el.textContent);
       const u = isUser(el);
-      return { index: i + 1, isUser: u, sender: u ? 'Bạn' : 'ChatGPT', content: text, length: text.length };
+      return { index: i + 1, isUser: u, sender: u ? t('senderYou') : 'ChatGPT', content: text, length: text.length };
     });
   }
 

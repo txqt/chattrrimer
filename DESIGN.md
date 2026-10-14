@@ -1,297 +1,355 @@
 ---
-version: alpha
-name: "Clerk"
-website: "https://clerk.com"
-description: "Clerk supplies a turnkey authentication and user‑management layer for React, Next.js and Remix applications, exposing a purple primary token (#6c47ff), a white canvas (#ffffff), a dark ink (#000000), a Geist‑Numbers‑based typographic system, and a component library of roughly twenty reusable UI primitives."
-
-seo:
-  title: "Clerk Design System for React — #6c47ff, geistNumbers, 20 components"
-  metaDescription: "Clerk’s design system centers on the brand purple #6c47ff and the Geist‑Numbers typeface, delivering a white canvas, dark ink, and a curated set of UI components for modern web apps."
-  highlights:
-    - "Primary accent — the brand purple #6c47ff appears on headings, CTA buttons, and interactive icons, establishing a consistent visual hook across the site."
-    - "Ink dominance — black #000000 powers all body copy and navigation links, delivering maximum contrast against the white canvas."
-    - "Hairline definition — the light gray #d9d9de is used for 1 px borders on tables, inputs, and card outlines, subtly separating content without visual noise."
-    - "Surface layering — neutral grays #e3e3e7 and #eeeef0 provide background bands for cards and modal dialogs, creating depth while preserving a flat aesthetic."
-  tags:
-    - "Design & Creative Tools"
-  lastUpdated: "2026-05-14"
-  author:
-    name: "Dov Azencot"
-    url: "https://x.com/dovazencot"
-  opening: |
-    Clerk’s homepage opens on a pure white canvas (#ffffff) that frames a headline rendered in 64 px Geist‑Numbers with a weight of 700, colored in the brand purple #6c47ff. Below the hero, body copy rests on dark ink #000000, while interactive elements such as primary buttons inherit the same purple accent and a 4 px border rendered in #d9d9de. The layout interleaves neutral surfaces – #e3e3e7 for card backgrounds and #eeeef0 for input fields – establishing a rhythm of contrast and relief that guides the eye without relying on gradients or illustrations.
-
-    Inside this DESIGN.md file you will find 23 color tokens grouped into primary, ink, canvas, hairline, muted, surface‑1/2/3, link, error, warning, and several brand‑specific shades; 12 typography tokens covering display, heading, body, caption, code, and button roles; 6 rounded values ranging from 0 px to a full 9999 px radius; a spacing scale from 4 px to 24 px; and a component catalog of 20 primitives that span navigation, forms, cards, alerts, and modals. The token set follows the Google Labs design‑token specification, exposing each value as a CSS custom property ready for consumption by Tailwind, CSS‑in‑JS, or native stylesheet imports.
-
-    To use the system, import the generated token file into your project and reference tokens via the {colors.x}, {typography.x}, {rounded.x}, and {spacing.x} placeholders. In Tailwind you can map the custom properties to theme extensions, while in CSS‑in‑JS you can read the variables directly from the :root. This approach guarantees visual consistency across React components and downstream applications, and it demonstrates why Clerk’s visual language merits close study for teams building authentication‑heavy products.
-  related:
-    - href: "/design"
-      title: "Browse all design systems"
-      description: "The full directory of DESIGN.md files on shadcn.io, with live mockups for each."
-    - href: "https://clerk.com"
-      title: "Clerk — official site"
-      description: "Clerk's public marketing site — the source of truth for the live tokens captured in this file."
-    - href: "https://github.com/google-labs-code/design.md"
-      title: "The DESIGN.md specification"
-      description: "Google Labs' open spec for machine-readable design system files — the format this page is built on."
-  questions:
-    - id: "what-is-the-role-of-the-primary-color-in"
-      title: "What is the role of the primary color in Clerk’s UI?"
-      answer: "The primary color #6c47ff functions as the visual anchor for all interactive affordances. It colors headings, CTA buttons, and highlighted icons, ensuring that users can instantly locate actionable elements. The token appears in the CSS variable list under --color-purple-500 and is referenced by components such as heroHeading, h2, and badge-primary. By limiting the accent to a single hue, the system avoids chromatic overload while still providing a clear signal hierarchy that separates primary actions from secondary text rendered in #000000."
-    - id: "how-does-the-typography-system-different"
-      title: "How does the typography system differentiate headings from body text?"
-      answer: "Headings employ the Geist‑Numbers family at larger sizes (32 px for display‑xl, 13 px for heading‑lg) with increased weight (600–700) and a negative letter‑spacing of –0.48 px, creating visual prominence. Body text uses the same family at 13 px or 11 px with a regular weight of 400 and normal letter‑spacing, delivering comfortable line heights of 20 px to 24 px. Code snippets switch to the soehneMono mono‑stack at 12 px weight 600, preserving readability for technical content. This tiered approach maintains typographic harmony while clearly signalling hierarchy."
-    - id: "what-spacing-conventions-are-applied-to"
-      title: "What spacing conventions are applied to form elements?"
-      answer: "Form elements adopt a base vertical spacing of 8 px between label and input, with horizontal padding of 8 px on the input container. The spacing token “sm” (12 px) is used for internal padding of buttons, while “md” (16 px) defines the gap between form rows. These values stem from the extracted spacing list where 8 px and 12 px dominate the count, ensuring that the vertical rhythm aligns with the line height of body text (20 px) and that controls feel neither cramped nor excessive."
-    - id: "how-are-error-states-visualized-in-the-c"
-      title: "How are error states visualized in the component library?"
-      answer: "Error states leverage the red token #ef4444, which appears in the CSS variable --color-red-500. Components such as alert-error and input-error border use this hue for outlines and background fills, while accompanying text adopts the same color for emphasis. The error color is paired with the neutral hairline #d9d9de for subtle borders, preserving contrast without overwhelming the layout. This consistent use of a single error hue across components creates an instantly recognisable feedback loop for users."
-    - id: "what-is-the-recommended-method-for-integ"
-      title: "What is the recommended method for integrating the rounded tokens into custom components?"
-      answer: "Rounded tokens are exposed as CSS variables –radius-sm (4 px), –radius-md (6 px), –radius-lg (8 px), –radius-xl (12 px), and –radius-full (9999 px). When building a custom component, assign the desired radius via var(--radius‑md) for moderate rounding or var(--radius‑full) for fully circular avatars. In Tailwind, map these variables to borderRadius utilities (e.g., rounded‑md: var(--radius‑md)). This strategy ensures that any new component inherits the same curvature language as the core library, maintaining visual cohesion across the product."
+version: 1.2.0
+name: ChatTrimmer
+website: "https://github.com/<username>/chattrrimer"
+description: >-
+  The design language of the ChatTrimmer browser-extension popup — a dark,
+  instrument-like utility built on a near-black zinc canvas "#141619", a single
+  violet voltage "#a855f7" reserved for folded state and primary action, and a
+  monospace voice (JetBrains Mono) that carries every number, label and tag.
+  Display and body copy run Plus Jakarta Sans. Surfaces are separated by 1px
+  hairlines rather than shadows; the only shadow in the system is the violet
+  glow under the on-page button.
+lastUpdated: "2026-10-14"
 
 colors:
-  primary: "#6c47ff"
-  ink: "#000000"
-  canvas: "#ffffff"
-  hairline: "#d9d9de"
-  muted: "#5e5f6e"
-  surface-1: "#e3e3e7"
-  surface-2: "#eeeef0"
-  surface-3: "#d9d9de"
-  link: "#6c47ff"
-  error: "#ef4444"
-  warning: "#ea520c"
-  brand-yellow: "#fff963"
-  brand-sky: "#38dafd"
-  brand-sky-light: "#5de3ff"
-  neutral-800: "#2f3037"
-  neutral-700: "#42434d"
-  neutral-600: "#5e5f6e"
-  neutral-500: "#747686"
-  neutral-400: "#9394a1"
-  neutral-300: "#b7b8c2"
-  neutral-200: "#d9d9de"
-  neutral-100: "#e3e3e7"
-  neutral-50: "#ffffff"
+  canvas: "#141619"
+  canvas-deep: "#0f1012"
+  surface-row: "#17191d"
+  surface-raised: "#22252b"
+  surface-stepper: "#111316"
+  surface-stats: "#0e0f11"
+  surface-footer: "rgba(0,0,0,0.4)"
+  hairline: "#26282d"
+  hairline-soft: "rgba(38,40,45,0.8)"
+  ink: "#e4e4e7"
+  ink-dim: "#a1a1aa"
+  ink-faint: "#71717a"
+  violet: "#a855f7"
+  violet-light: "#c084fc"
+  violet-pale: "#d8b4fe"
+  violet-deep: "#9333ea"
+  violet-wash: "rgba(168,85,247,0.1)"
+  violet-fold: "rgba(59,7,100,0.4)"
+  violet-panel: "rgba(59,7,100,0.2)"
+  violet-panel-edge: "rgba(168,85,247,0.4)"
+  success: "#34d399"
+  destructive: "#b91c1c"
 
 typography:
-  display-xl:
-    fontFamily: "geistNumbers, suisse, \"suisse Fallback\""
-    fontSize: 32px
+  family-sans: "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+  family-mono: "'JetBrains Mono', ui-monospace, 'SFMono-Regular', Consolas, monospace"
+  title:
+    fontFamily: "{typography.family-sans}"
+    fontSize: 14px
     fontWeight: 600
-    lineHeight: 40px
-    letterSpacing: "-0.48px"
-  heading-lg:
-    fontFamily: "geistNumbers, suisse, \"suisse Fallback\""
-    fontSize: 13px
-    fontWeight: 700
-    lineHeight: 72px
-    letterSpacing: "-1.6px"
-  body-md:
-    fontFamily: "geistNumbers, suisse, \"suisse Fallback\""
-    fontSize: 13px
-    fontWeight: 400
-    lineHeight: 20px
-  body-sm:
-    fontFamily: "geistNumbers, suisse, \"suisse Fallback\""
+    letterSpacing: "-0.2px"
+  sub:
+    fontFamily: "{typography.family-sans}"
     fontSize: 11px
     fontWeight: 400
-    lineHeight: 18px
-  caption-sm:
-    fontFamily: "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+  body:
+    fontFamily: "{typography.family-sans}"
+    fontSize: 12px
+    fontWeight: 400
+    lineHeight: 1.5
+  label:
+    fontFamily: "{typography.family-mono}"
     fontSize: 10px
     fontWeight: 400
-    lineHeight: 16px
-  code-sm:
-    fontFamily: "soehneMono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace"
+    letterSpacing: "0.08em"
+  label-value:
+    fontFamily: "{typography.family-mono}"
     fontSize: 12px
     fontWeight: 600
-    lineHeight: 24px
-  button-lg:
-    fontFamily: "geistNumbers, suisse, \"suisse Fallback\""
-    fontSize: 15px
+  tag:
+    fontFamily: "{typography.family-mono}"
+    fontSize: 9px
     fontWeight: 400
-    lineHeight: 24px
-  label-sm:
-    fontFamily: "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
-    fontSize: 12px
-    fontWeight: 500
-    lineHeight: 18px
-  overline:
-    fontFamily: "Inter, \"Inter Fallback\""
-    fontSize: 11px
-    fontWeight: 400
-    lineHeight: 18px
-  small:
-    fontFamily: "Inter, \"Inter Fallback\""
+  caption:
+    fontFamily: "{typography.family-mono}"
     fontSize: 10px
     fontWeight: 400
-    lineHeight: 16px
-  tiny:
-    fontFamily: "geistNumbers, suisse, \"suisse Fallback\""
-    fontSize: 13px
+  button:
+    fontFamily: "{typography.family-sans}"
+    fontSize: 12px
     fontWeight: 500
-    lineHeight: 19.89px
 
 rounded:
-  none: "0px"
-  sm: "4px"
-  md: "6px"
-  lg: "8px"
-  xl: "12px"
-  full: "9999px"
+  xs: "4px"
+  sm: "6px"
+  md: "8px"
+  lg: "12px"
+  pill: "9999px"
 
 spacing:
   xxs: "4px"
-  xs: "8px"
-  sm: "12px"
-  md: "16px"
-  base: "20px"
-  lg: "24px"
-  xl: "32px"
+  xs: "6px"
+  sm: "8px"
+  md: "10px"
+  base: "12px"
+  lg: "14px"
+  xl: "16px"
 
 components:
-  primary-button:
-    backgroundColor: "{colors.primary}"
-    textColor: "{colors.canvas}"
-    borderRadius: "{rounded.md}"
-    paddingX: "{spacing.sm}"
-    paddingY: "{spacing.xs}"
-    font: "{typography.button-lg}"
-    border: "0px"
-  secondary-button:
+  popup-shell:
+    width: "360px"
     backgroundColor: "{colors.canvas}"
     textColor: "{colors.ink}"
-    borderColor: "{colors.hairline}"
-    borderRadius: "{rounded.sm}"
-    paddingX: "{spacing.sm}"
-    paddingY: "{spacing.xs}"
-    font: "{typography.body-sm}"
-    borderWidth: "1px"
-  card:
-    backgroundColor: "{colors.surface-2}"
-    borderColor: "{colors.hairline}"
-    borderRadius: "{rounded.lg}"
-    padding: "{spacing.md}"
-    shadow: "0 1px 3px rgba(0,0,0,0.1)"
-  modal:
-    backgroundColor: "{colors.canvas}"
-    borderRadius: "{rounded.xl}"
-    padding: "{spacing.lg}"
-    maxWidth: "480px"
-    boxShadow: "0 4px 12px rgba(0,0,0,0.2)"
-  alert-success:
-    backgroundColor: "#22c543"
-    textColor: "{colors.canvas}"
-    borderRadius: "{rounded.sm}"
-    padding: "{spacing.sm}"
-    font: "{typography.body-sm}"
-  alert-error:
-    backgroundColor: "{colors.error}"
-    textColor: "{colors.canvas}"
-    borderRadius: "{rounded.sm}"
-    padding: "{spacing.sm}"
-    font: "{typography.body-sm}"
-  nav-bar:
+    typography: "{typography.body}"
+  header:
     backgroundColor: "{colors.canvas}"
     textColor: "{colors.ink}"
-    borderBottomColor: "{colors.hairline}"
-    paddingY: "{spacing.xs}"
-    font: "{typography.body-sm}"
-  nav-link:
-    textColor: "{colors.link}"
-    font: "{typography.body-sm}"
-    paddingX: "{spacing.xs}"
-  input-field:
-    backgroundColor: "{colors.canvas}"
+    padding: "14px 16px"
+    borderBottom: "1px solid {colors.hairline-soft}"
+  state-pill:
+    backgroundColor: "{colors.violet-wash}"
+    textColor: "{colors.violet-pale}"
+    typography: "{typography.caption}"
+    rounded: "{rounded.pill}"
+    padding: "5px 11px"
+    border: "1px solid rgba(168,85,247,0.3)"
+  state-pill-off:
+    backgroundColor: transparent
+    textColor: "{colors.ink-dim}"
+    border: "1px solid {colors.hairline}"
+  fold-row:
+    backgroundColor: "{colors.surface-row}"
     textColor: "{colors.ink}"
-    borderColor: "{colors.hairline}"
-    borderRadius: "{rounded.sm}"
-    paddingX: "{spacing.sm}"
-    paddingY: "{spacing.xs}"
-    font: "{typography.body-sm}"
-  dropdown:
-    backgroundColor: "{colors.surface-1}"
-    borderColor: "{colors.hairline}"
-    borderRadius: "{rounded.sm}"
-    paddingY: "{spacing.xs}"
-    font: "{typography.body-sm}"
-  tooltip:
-    backgroundColor: "{colors.neutral-800}"
-    textColor: "{colors.canvas}"
-    borderRadius: "{rounded.sm}"
-    paddingX: "{spacing.xs}"
-    paddingY: "{spacing.xxs}"
-    font: "{typography.caption-sm}"
-  badge-primary:
-    backgroundColor: "{colors.primary}"
-    textColor: "{colors.canvas}"
-    borderRadius: "{rounded.full}"
-    paddingX: "{spacing.xxs}"
-    paddingY: "{spacing.xxs}"
-    font: "{typography.overline}"
-  badge-neutral:
-    backgroundColor: "{colors.neutral-200}"
+    rounded: "{rounded.lg}"
+    padding: "10px"
+    border: "1px solid {colors.hairline}"
+  fold-index:
+    backgroundColor: "{colors.surface-raised}"
+    textColor: "{colors.ink-dim}"
+    typography: "{typography.caption}"
+    rounded: "{rounded.md}"
+  fold-tag:
+    backgroundColor: "{colors.surface-raised}"
+    textColor: "{colors.ink-dim}"
+    typography: "{typography.tag}"
+    rounded: "{rounded.xs}"
+    padding: "1px 6px"
+  fold-expand:
+    backgroundColor: "{colors.violet-fold}"
+    textColor: "{colors.violet-light}"
+    typography: "{typography.caption}"
+    rounded: "{rounded.sm}"
+    padding: "5px 9px"
+    border: "1px solid rgba(107,33,168,0.5)"
+  tail-card:
+    backgroundColor: "{colors.violet-panel}"
     textColor: "{colors.ink}"
-    borderRadius: "{rounded.full}"
-    paddingX: "{spacing.xxs}"
-    paddingY: "{spacing.xxs}"
-    font: "{typography.overline}"
+    rounded: "{rounded.lg}"
+    padding: "12px"
+    border: "1px solid {colors.violet-panel-edge}"
+  tag-visible:
+    backgroundColor: "rgba(88,28,135,0.5)"
+    textColor: "{colors.violet-pale}"
+    typography: "{typography.caption}"
+    rounded: "{rounded.xs}"
+    padding: "2px 7px"
+  button-unfold:
+    backgroundColor: "{colors.violet-deep}"
+    textColor: "#ffffff"
+    typography: "{typography.button}"
+    rounded: "{rounded.md}"
+    padding: "8px 12px"
+  stepper:
+    backgroundColor: "{colors.surface-stepper}"
+    padding: "12px 16px"
+    borderTop: "1px solid {colors.hairline}"
+  range-track:
+    backgroundColor: "{colors.surface-raised}"
+    height: "6px"
+    rounded: "{rounded.pill}"
+  stats-row:
+    backgroundColor: "{colors.surface-stats}"
+    textColor: "{colors.ink-dim}"
+    typography: "{typography.caption}"
+    padding: "10px 16px"
+    borderTop: "1px solid {colors.hairline-soft}"
   footer:
-    backgroundColor: "{colors.neutral-800}"
-    textColor: "{colors.muted}"
-    paddingY: "{spacing.md}"
-    font: "{typography.caption-sm}"
-  sidebar:
-    backgroundColor: "{colors.neutral-100}"
-    textColor: "{colors.ink}"
-    width: "240px"
-    padding: "{spacing.md}"
-  form-label:
-    textColor: "{colors.ink}"
-    font: "{typography.label-sm}"
-    marginBottom: "{spacing.xxs}"
-  form-button:
-    backgroundColor: "{colors.primary}"
-    textColor: "{colors.canvas}"
-    borderRadius: "{rounded.md}"
-    paddingX: "{spacing.sm}"
-    paddingY: "{spacing.xs}"
-    font: "{typography.button-lg}"
-  icon-button:
-    backgroundColor: "transparent"
-    textColor: "{colors.link}"
-    borderRadius: "{rounded.full}"
-    padding: "{spacing.xxs}"
-    font: "{typography.body-sm}"
-
+    backgroundColor: "{colors.surface-footer}"
+    textColor: "{colors.ink-dim}"
+    typography: "{typography.caption}"
+    padding: "10px 16px"
+    borderTop: "1px solid {colors.hairline}"
+  toast:
+    backgroundColor: "{colors.violet-deep}"
+    textColor: "#ffffff"
+    typography: "{typography.caption}"
+    rounded: "{rounded.pill}"
+    padding: "7px 14px"
+  toast-error:
+    backgroundColor: "{colors.destructive}"
+  on-page-button:
+    backgroundColor: "{colors.violet-deep}"
+    textColor: "#ffffff"
+    typography: "{typography.button}"
+    rounded: "{rounded.pill}"
+    padding: "8px 14px"
+    shadow: "0 6px 18px rgba(147,51,234,0.28)"
 ---
-
 
 ## Overview
 
-Clerk’s visual language rests on a single, deliberate move: **Purple‑as‑action.** The system treats the brand purple #6c47ff as the exclusive signal for interactive elements, while all surrounding UI remains in neutral grays or stark white. Where most SaaS dashboards scatter multiple accent hues across headers, buttons, and alerts, Clerk confines color to one purposeful hue, letting structure and typography carry the remaining hierarchy. This restraint yields a clean, data‑focused experience that scales across documentation, dashboards, and embedded widgets.
+ChatTrimmer's popup is a **dark instrument panel**, not a settings page. It opens for a few seconds, answers one question — *is my thread folded, and can I get it back?* — and gets out of the way.
 
-Key Characteristics:
-- Primary accent #6c47ff applied to headings, CTA buttons, and interactive icons.
-- Dark ink #000000 provides maximum legibility on the white canvas.
-- Neutral surface layers (#e3e3e7, #eeeef0) create depth without additional colors.
-- Hairline borders #d9d9de delineate tables and cards with minimal visual weight.
-- Rounded tokens range from 4 px to full circles, offering consistent curvature.
-- Spacing tokens from 4 px to 24 px enforce a predictable rhythm.
-- Typography hierarchy uses Geist‑Numbers for headings and body, with a mono‑stack for code.
-- Component library includes 20 primitives covering navigation, forms, alerts, and modals.
-- CSS custom properties expose every token for Tailwind or CSS‑in‑JS consumption.
-- The design system aligns with Google Labs token spec, ensuring interoperability.
+The canvas is a near-black zinc `{colors.canvas}` (`#141619`), one step lighter than the page behind it. Surfaces climb in small, deliberate steps: `{colors.surface-row}` (`#17191d`) for fold rows, `{colors.surface-raised}` (`#22252b`) for the small index/tag chips, `{colors.surface-stepper}` (`#111316`) and `{colors.surface-stats}` (`#0e0f11`) darkening again for the lower bands. There is no light surface anywhere except the white text.
+
+Colour carries meaning, not decoration. **Violet** is the folded/foldable state: it marks the active tail panel, the Expand buttons, the primary action and the on-page button. Everything else is greyscale. Green `{colors.success}` (`#34d399`) marks liveness only — the state dot in the header and the status dot in the tail card. Red `{colors.destructive}` (`#b91c1c`) appears only in error toasts.
+
+Type splits into two registers. **Plus Jakarta Sans** carries anything the user reads as a sentence — the thread title, the status line, the description under the tail card, the primary button. **JetBrains Mono** carries anything the user reads as a measurement — the fold ranges, section labels, tags, counters, footer, toasts. Set a number in the sans face and it stops looking like an instrument.
+
+Horizontal 1px hairlines `{colors.hairline}` (`#26282d`) do all the structural work between bands. There are **no drop shadows inside the popup** — the only shadow in the entire system is the violet glow under the on-page button, which has to float above a page that isn't ours.
+
+**Key characteristics:**
+- 360px fixed width; a vertical stack of five bands: header, fold map, trim stepper, sender stats, footer.
+- One reserved accent `{colors.violet}` — folded state and primary action only.
+- Monospace voice for all numbers, ranges, labels, tags and toasts.
+- Hairline-separated surfaces instead of cards-with-shadows.
+- Fold rows are the only repeated interactive unit; each holds an index chip, a mono range, a preview line and an Expand button.
+- 12px radius on fold rows and the tail card; 9999px only on the state pill, the range track and toasts.
+
+## Colors
+
+### Canvas & Surface
+- **Canvas** (`{colors.canvas}` — `#141619`): the popup body. Every band sits on it unless it steps darker.
+- **Canvas Deep** (`{colors.canvas-deep}` — `#0f1012`): the page behind the popup in design mockups; not used inside the shipped UI.
+- **Surface Row** (`{colors.surface-row}` — `#17191d`): the fold-row fill. One step above the canvas.
+- **Surface Raised** (`{colors.surface-raised}` — `#22252b`): the small chips inside a fold row (index badge, "Folded" tag) and the range track.
+- **Surface Stepper / Stats** (`#111316` / `#0e0f11`): the two lower bands step *darker* than the canvas, which visually closes the popup the way a footer does.
+- **Footer** (`rgba(0,0,0,0.4)`): the deepest band, a translucent black over the canvas.
+
+### Ink
+- **Ink** (`{colors.ink}` — `#e4e4e7`): body and titles.
+- **Ink Dim** (`{colors.ink-dim}` — `#a1a1aa`): supporting text, mono counters, footer.
+- **Ink Faint** (`{colors.ink-faint}` — `#71717a`): preview lines, scale ticks, the "off" state dot.
+
+### Accent
+- **Violet** (`{colors.violet}` — `#a855f7`): hover fill of the primary button and focus outlines.
+- **Violet Deep** (`{colors.violet-deep}` — `#9333ea`): the rest state of every primary action (Unfold button, toast, on-page button).
+- **Violet Light** (`{colors.violet-light}` — `#c084fc`): Expand button label, range thumb, the accent value text.
+- **Violet Pale** (`{colors.violet-pale}` — `#d8b4fe`): text on violet-tinted chips (state pill, Visible tag).
+- **Violet Wash / Fold / Panel**: the three low-alpha violet fills that tint the state pill, Expand buttons and the tail card without competing with the primary button.
+
+### Semantic
+- **Success** (`{colors.success}` — `#34d399`): live-state dots only.
+- **Destructive** (`{colors.destructive}` — `#b91c1c`): error toast background only.
+
+## Typography
+
+Two families, two jobs, no overlap.
+
+| Token | Size | Weight | Family | Use |
+|---|---|---|---|---|
+| `{typography.title}` | 14px | 600 | Plus Jakarta Sans | Thread title |
+| `{typography.sub}` | 11px | 400 | Plus Jakarta Sans | Status line under the title |
+| `{typography.body}` | 12px | 400 | Plus Jakarta Sans | Tail-card description |
+| `{typography.button}` | 12px | 500 | Plus Jakarta Sans | Unfold button, on-page button |
+| `{typography.label}` | 10px | 400 | JetBrains Mono | Section labels (uppercase, 0.08em) |
+| `{typography.label-value}` | 12px | 600 | JetBrains Mono | Tail Window Size value |
+| `{typography.caption}` | 10px | 400 | JetBrains Mono | Counters, tags, footer, toasts, Expand |
+| `{typography.tag}` | 9px | 400 | JetBrains Mono | "Folded" tag, slider scale ticks |
+
+### Principles
+- **Numbers never touch the sans face.** Fold ranges, WD sizes, percentages, counts — always JetBrains Mono.
+- **Labels are uppercase mono with tracking.** Set the section label in sentence case sans and the instrument read collapses.
+- **No weight above 600.** Titles are 600; everything else 400–500.
+- **Family fallbacks are required.** Both faces are bundled locally (SIL OFL) because extensions cannot fetch webfonts from a CDN.
+
+## Layout
+
+Fixed-width 360px column, five bands, no scrolling containers inside the popup except the fold list.
+
+| Band | Padding | Fill |
+|---|---|---|
+| Header | 14px 16px | `{colors.canvas}` |
+| Fold map | 14px 16px | `{colors.canvas}` |
+| Trim stepper | 12px 16px | `{colors.surface-stepper}` |
+| Sender stats | 10px 16px | `{colors.surface-stats}` |
+| Footer | 10px 16px | `{colors.surface-footer}` |
+
+- **Fold list**: vertical stack, `{spacing.sm}` (8px) gap between rows.
+- **Scale ticks**: three labels spread edge to edge under the range, at `{typography.tag}`.
+- **Stats row**: dots + mono counters on the left, CSV link pushed to the right edge.
+
+## Elevation & Depth
+
+| Level | Treatment | Use |
+|---|---|---|
+| 0 | Flat | Every popup surface |
+| Hairline | 1px `{colors.hairline}` | Band separation, fold-row outline |
+| Outline + tint | 1px violet edge over a low-alpha violet fill | Tail card, Expand buttons, state pill |
+| Glow | `0 6px 18px rgba(147,51,234,0.28)` | On-page button only |
+
+Depth inside the popup is a colour step, not a shadow. The single glow exists because the on-page button floats over a foreign page and must not look glued to it.
+
+## Shapes
+
+| Token | Value | Use |
+|---|---|---|
+| `{rounded.xs}` | 4px | "Folded" tag, "Visible" tag |
+| `{rounded.sm}` | 6px | Expand button |
+| `{rounded.md}` | 8px | Fold index chip, Unfold button |
+| `{rounded.lg}` | 12px | Fold row, tail card |
+| `{rounded.pill}` | 9999px | State pill, range track + thumb, toast, on-page button |
+
+Nothing uses 16px or 20px. The scale is deliberately narrow: chips are 4–8px, panels are 12px, and anything the user clicks-and-holds is a full pill.
+
+## Components
+
+**`popup-shell`** — 360px fixed-width dark column. No title bar inside the popup; the header band does that job.
+
+**`header`** — Thread title (sans, 600) with a 6px green live dot inline; below it a status line that switches between "folding" and "off". On the right, `state-pill`.
+
+**`state-pill`** — The on/off control, rendered as a mono status chip rather than an iOS switch. Active: violet wash background, violet-pale text, violet border. Off: transparent, dim text, hairline border.
+
+**`fold-row`** — The core repeated unit. Left: a raised index chip, then a mono range (`Messages 1 — 50`), a "Folded" tag, and a preview of the first folded message on its own line. Right: `fold-expand`.
+
+**`fold-expand`** — Small violet-tinted button labelled "Expand". Expands exactly that fold; the fold map re-renders with the remaining folds.
+
+**`tail-card`** — The violet-tinted panel describing what is still visible: status dot, "Active Tail: last N messages", a "Visible" tag, a one-line explanation, and `button-unfold`.
+
+**`button-unfold`** — Full-width violet primary action. Disabled (45% opacity) when nothing is folded. Label is followed by a mono count `(N messages)`.
+
+**`stepper`** — "Tail Window Size" label, a mono value on the right, a full-width range, and three mono scale ticks.
+
+**`stats-row`** — Two dot + mono counter pairs (You / ChatGPT with percentages) and an "Export CSV" text link at the right edge.
+
+**`toast`** — Pill anchored bottom-centre, violet for success and red for errors, mono 10px.
+
+**`on-page-button`** — The only element injected into ChatGPT itself. Violet pill, mono-adjacent sans label, `Unfold N · M folded`, with the system's single glow.
+
+## Do's and Don'ts
+
+### Do
+- Keep violet for folded state and primary action only. Everything else is greyscale.
+- Set every number, range, tag and label in JetBrains Mono.
+- Separate bands with 1px hairlines and colour steps, not shadows.
+- Keep the popup exactly 360px wide and let it grow vertically.
+- Give each fold a real preview line — the first folded message — so the map reads like content, not a counter.
+- Step the lower bands *darker* than the canvas to close the popup.
+
+### Don't
+- Don't introduce a second accent colour; green and red are state indicators, not decoration.
+- Don't put a drop shadow on any popup surface.
+- Don't use radii outside 4/6/8/12/9999px.
+- Don't render numbers or code-like values in Plus Jakarta Sans.
+- Don't exceed weight 600.
+- Don't turn the fold list into a paginated table — it is a stack of rows.
+
+## Responsive Behavior
+
+A browser popup has exactly one size, so there are no breakpoints. Two constraints follow from that:
+
+- **Width is fixed at 360px.** Long thread titles truncate with an ellipsis at ~220px; fold previews truncate at ~170px.
+- **Height is content-driven.** With many folds the popup grows tall; a thread with hundreds of folded messages should stay manageable by keeping `FOLD_SIZE` at 50.
 
 ## Known Gaps
 
-- The token set lacks explicit dark‑mode variants; designers must manually invert canvas and ink for night‑time experiences, which adds overhead for teams targeting both themes.
-- No dedicated success color appears in the extracted palette, forcing reuse of the brand purple for positive feedback and potentially confusing users.
-- The spacing scale includes compound values (e.g., "4px 8px") that are not directly usable as single‑dimension tokens, requiring developers to split them manually.
-- Rounded values contain an extreme radius (6.71089e+07px) that does not map cleanly to typical UI patterns, so the full‑radius token is approximated with 9999px.
-- Component documentation is limited to structural properties; interaction states such as hover, focus, and disabled are not enumerated, leaving implementation details ambiguous.
-- Font‑size tokens are expressed in pixels rather than rem units, which can hinder responsive scaling across varied viewport sizes.
-- The brand yellow #fff963 appears only in the color list but is not referenced by any component, suggesting an unused accent that could be repurposed for warnings or highlights.
+- **Scroll behaviour for very long fold lists** is not specified — the current build lets the popup grow.
+- **Motion specs** (row hover, thumb drag, toast enter/leave) are not tokenised; they are simple 150–200ms eased transitions.
+- **Empty and error surfaces** exist for "no conversation" and "unsupported" but have no illustration treatment.
+- **The on-page button** renders in the host page's font stack, not the bundled families, because the extension does not expose the font files to the page.

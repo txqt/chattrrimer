@@ -1,48 +1,57 @@
 # ChatTrimmer
 
-Gấp tin nhắn cũ trong **ChatGPT** để cuộc trò chuyện dài không còn lag. Tin bị gấp vẫn nằm trong trang, mở lại bất cứ lúc nào.
+Fold away the old messages in **ChatGPT** so long conversations stop feeling sluggish. Folded messages stay in the page — unfold any of them whenever you need to.
 
-## Tính năng
+## Features
 
-- **Gấp tin cũ**: chỉ giữ lại N tin gần nhất, phần cũ hơn được gấp lại khỏi giao diện.
-- **Conversation Fold Map**: xem phần đã gấp chia thành từng khối và **mở riêng từng khối**.
-- **Mở toàn bộ**: một nút trả lại toàn bộ cuộc trò chuyện.
-- **Tail Window Size**: thanh trượt chỉnh số tin giữ lại (10–100).
-- **Thống kê người gửi**: tỉ lệ tin của bạn so với ChatGPT.
-- **Xuất CSV** toàn bộ cuộc trò chuyện.
-- **Nút "Mở … tin"** ngay trên trang khi có tin đang bị gấp.
+- **Auto-fold old messages** — keep only the last N messages visible; older ones are folded out of the layout.
+- **Conversation Fold Map** — the folded part is split into chunks, each with its own **Expand** button.
+- **Unfold everything** — one click restores the whole conversation.
+- **Tail Window Size** — a slider that controls how many recent messages stay visible (10–100).
+- **Sender stats** — your messages vs ChatGPT's, with percentages.
+- **CSV export** of the full conversation.
+- **On-page button** ("Unfold N · M folded") that appears whenever anything is folded.
 
-## Nền tảng
+## Supported platform
 
-Chỉ **ChatGPT** (`chatgpt.com`, `chat.openai.com`). Các nền tảng khác chưa hỗ trợ.
+**ChatGPT** only (`chatgpt.com`, `chat.openai.com`). Other AI chats are not supported yet.
 
-## Cài đặt (load unpacked)
+## Install (load unpacked)
 
-1. Tải repository này về máy.
-2. Mở `chrome://extensions/`.
-3. Bật **Developer mode**.
-4. Chọn **Load unpacked** → trỏ tới thư mục extension.
-5. Mở một cuộc trò chuyện trên ChatGPT và tải lại trang.
+1. Download this repository.
+2. Open `chrome://extensions/`.
+3. Enable **Developer mode**.
+4. Click **Load unpacked** and select the extension folder.
+5. Open a conversation on ChatGPT and reload the page.
 
-## Cấu trúc
+## Localization
+
+The UI ships with **English** and **Vietnamese** via Chrome's i18n (`_locales/`).
+It follows the browser language automatically — no setting to change. To add a language, copy
+`_locales/en/` to `_locales/<code>/` and translate the values.
+
+## Project structure
 
 ```
-manifest.json         # Manifest V3 (chỉ host ChatGPT)
-popup.html / .css     # Giao diện popup — "Thread Accordion"
-src/popup.js          # Logic popup (fold map, thống kê, CSV)
-src/content.js        # Content script: gấp/mở tin nhắn trên trang
-styles.css            # Style chèn vào trang (class ẩn, nút trên trang)
-fonts/                # Plus Jakarta Sans + JetBrains Mono (OFL), bundle sẵn
-icons/                # Icon 16/48/128
-STITCH-PROMPT.md      # Prompt thiết kế UI
+manifest.json         # Manifest V3 (ChatGPT hosts only)
+popup.html / .css     # Popup UI — "Thread Accordion"
+src/popup.js          # Popup logic (fold map, stats, CSV, i18n)
+src/content.js        # Content script: folds/unfolds messages on the page
+styles.css            # Styles injected into the page (hidden class, on-page button)
+_locales/en|vi        # UI strings
+fonts/                # Plus Jakarta Sans + JetBrains Mono (OFL), bundled
+icons/                # 16/48/128 icons
+DESIGN.md             # Design system reference for the current UI
+STITCH-PROMPT.md      # Prompts used to explore the UI design
 ```
 
-## Ghi chú kỹ thuật
+## Technical notes
 
-- Font được **bundle trong `fonts/`** vì extension MV3 không nạp được font từ CDN.
-- Không dùng thư viện ngoài; toàn bộ CSS/JS viết tay.
-- Kích thước một fold cố định 50 tin (`FOLD_SIZE` trong `src/content.js`).
+- Fonts are **bundled in `fonts/`** because MV3 extensions cannot load fonts from a CDN.
+- No third-party libraries — all CSS and JS is hand-written.
+- A fold holds a fixed 50 messages (`FOLD_SIZE` in `src/content.js`).
+- Folded messages are hidden with `display: none`; nothing is deleted from the page or the thread.
 
 ## License
 
-MIT — xem [LICENSE](LICENSE).
+MIT — see [LICENSE](LICENSE).

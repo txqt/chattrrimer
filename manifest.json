@@ -1,8 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "ChatTrimmer",
-  "version": "1.1.0",
-  "description": "Gấp tin nhắn cũ trong ChatGPT để cuộc trò chuyện dài không còn lag.",
+  "default_locale": "en",
+  "name": "__MSG_extName__",
+  "version": "1.2.0",
+  "description": "__MSG_extDesc__",
 
   "permissions": [
     "storage"
@@ -25,7 +26,7 @@
 
   "action": {
     "default_popup": "popup.html",
-    "default_title": "ChatTrimmer",
+    "default_title": "__MSG_extName__",
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png",
