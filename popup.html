@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChatTrimmer</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="app">
+
+    <header class="app-header">
+      <div class="brand">
+        <span class="brand-mark">CT</span>
+        <div class="brand-text">
+          <h1>ChatTrimmer</h1>
+          <p>Giữ cuộc trò chuyện AI nhẹ và mượt</p>
+        </div>
+      </div>
+      <span class="version" id="versionLabel">v1.0.0</span>
+    </header>
+
+    <nav class="pill-tabs" role="tablist">
+      <button class="pill-tab active" data-tab="settings" role="tab">Cài đặt</button>
+      <button class="pill-tab" data-tab="statistics" role="tab">Thống kê</button>
+    </nav>
+
+    <!-- Cài đặt -->
+    <section class="tab-panel active" id="settings-tab">
+      <div class="card platform-card">
+        <span class="eyebrow">Nền tảng hiện tại</span>
+        <span class="badge" id="currentPlatform">Đang kiểm tra…</span>
+      </div>
+
+      <div class="card">
+        <div class="row">
+          <div class="row-text">
+            <span class="row-title">Bật tự động ẩn</span>
+            <p class="row-sub">Ẩn tin nhắn cũ để giảm lag</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="autoHideToggle">
+            <span class="switch-track"></span>
+          </label>
+        </div>
+
+        <div class="row column">
+          <div class="row-text">
+            <span class="row-title">Số tin nhắn hiển thị</span>
+            <p class="row-sub">Giữ lại N tin gần nhất (10–200)</p>
+          </div>
+          <input type="number" id="maxMessages" class="text-input" min="10" max="200" value="10">
+        </div>
+
+        <div class="row column">
+          <div class="row-text">
+            <span class="row-title">Số tin mỗi lần "Show More"</span>
+            <p class="row-sub">Từ 5 đến 50</p>
+          </div>
+          <input type="number" id="showMoreCount" class="text-input" min="5" max="50" value="5">
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="eyebrow">Nền tảng áp dụng</span>
+        <label class="site-row">
+          <span class="site-name">ChatGPT</span>
+          <span class="badge badge-ok">Ổn định</span>
+          <input type="checkbox" class="site-check" data-site="chatgpt">
+        </label>
+        <label class="site-row">
+          <span class="site-name">Google AI Studio</span>
+          <span class="badge">Beta</span>
+          <input type="checkbox" class="site-check" data-site="aistudio">
+        </label>
+        <label class="site-row">
+          <span class="site-name">Claude</span>
+          <span class="badge">Beta</span>
+          <input type="checkbox" class="site-check" data-site="claude">
+        </label>
+        <label class="site-row">
+          <span class="site-name">Grok</span>
+          <span class="badge">Beta</span>
+          <input type="checkbox" class="site-check" data-site="grok">
+        </label>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="saveBtn">Lưu cài đặt</button>
+        <button class="btn btn-secondary" id="resetBtn">Đặt lại</button>
+      </div>
+      <div class="status" id="status"></div>
+    </section>
+
+    <!-- Thống kê -->
+    <section class="tab-panel" id="statistics-tab">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-num" id="totalUserMessages">0</span>
+          <span class="stat-label">Tin của bạn</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num" id="totalAiMessages">0</span>
+          <span class="stat-label">Tin AI</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num" id="totalAllMessages">0</span>
+          <span class="stat-label">Tổng</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="eyebrow">Danh sách tin nhắn</span>
+          <span class="muted-small">Bấm để nhảy tới</span>
+        </div>
+        <div class="messages-list" id="messagesList"></div>
+      </div>
+
+      <button class="btn btn-primary full" id="exportCsvBtn">Xuất CSV</button>
+    </section>
+
+    <footer class="app-footer">ChatTrimmer · MIT</footer>
+  </div>
+
+  <script src="src/popup.js"></script>
+</body>
+</html>
